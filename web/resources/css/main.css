@@ -1,0 +1,171 @@
+html, body {
+	position: relative;
+	height: 100%;
+	white-space: nowrap;
+	margin: 0;
+	background: #e3e3e3;
+  font-family: Ubuntu;
+}
+
+.todo-list {
+	background: rgb(7, 127, 214);
+	border: solid 3px #0d2893;
+	border-radius: 5px;
+	display: inline-table;
+	padding: 5px;
+	margin: 5px 0 0 5px;
+	position: relative;
+	width: 297px;
+}
+
+.todo-list button,
+.addListForm button {
+	background: none;
+	border: 0;
+	cursor: pointer;
+	color: inherit;
+	margin: 5px 1px 0;
+	padding: 2px;
+	opacity: 1;
+}
+
+.list-title {
+	background: #073679;
+	color: white;
+	border-radius: 5px;
+	padding: 5px;
+	position: relative;
+	font-size: 20px;
+	font-weight: bold;
+}
+
+.tasks {
+	list-style-type: none;
+	padding: 0;
+	overflow-y: auto;
+	max-height: 80vh;
+}
+
+.task {
+	margin: 5px;
+	padding: 5px;
+	border-radius: 5px;
+	background: #f6f6f6;
+	vertical-align:top;
+	position: relative;
+}
+
+.done {
+	opacity: 0.4;
+}
+
+.name {
+	background: inherit;
+	border: none;
+	font-size: 18px;
+	color: inherit;
+	resize: none;
+	width: 92%;
+	overflow: hidden;
+}
+
+.buttons {
+	position: absolute;
+	background: inherit;
+	right: 5px;
+	top: 5px;
+	opacity: 0.9;
+	visibility: hidden;
+}
+
+.buttons:hover {
+	opacity: 1;
+}
+
+.edit-btn:hover,
+.delete-btn:hover {
+	background: #c7c7c7;
+	color: black;
+	border-radius: 3px;
+}
+
+.toggleDone-btn {
+	float: left;
+}
+
+.addListForm {
+	display: inline-block;
+	padding: 0 15px;
+	margin: 0;
+}
+
+/*Login page*/
+
+.app-haeder{
+  color: aliceblue;
+  background: #073679;
+  text-align: center;
+  border-radius: 5px;
+  margin: 0 auto 50px;
+  padding: 10px;
+  width: 245px;
+}
+
+.login-dialog {
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -60%);
+}
+.login-form {
+	padding: 20px 0;
+	font-size: 2em;
+}
+
+.login-form input {
+	height: 26px;
+	font-size: 0.8em;
+	width: 200px;
+	vertical-align: text-bottom;
+}
+
+@media (max-width: 850px) {
+  .login-form {
+    width: 245px;
+    text-align: center;
+  }
+	.login-form input {
+		display: block;
+    width: 245px;
+	}
+  .logIn-btn {
+    margin: 25px 0 20px;
+  }
+}
+
+.logIn-btn {
+	display: inline-block;
+	background: #073679;
+	font-size: 0.7em;
+	padding: 2px;
+	width: 130px;
+	color: aliceblue;
+	vertical-align: text-bottom;
+	cursor: pointer;
+}
+
+.signUp-btn {
+	display: inline-block;
+	background: #c13e3e;
+	font-size: 1.2em;
+	padding: 4px 10px;
+	text-decoration: none;
+	text-align: center;
+	color: aliceblue;
+}
+
+.forgotPassword-btn {
+	display: inline-block;
+	float: right;
+	color: #073679;
+}
