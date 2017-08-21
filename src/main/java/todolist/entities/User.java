@@ -4,7 +4,7 @@ import javax.persistence.*;
 import java.util.Collection;
 
 @Entity
-@Table(name = "users", schema = "spring-todo-list", catalog = "")
+@Table(name = "users", schema = "spring-todo-list")
 public class User {
     private int id;
     private String login;

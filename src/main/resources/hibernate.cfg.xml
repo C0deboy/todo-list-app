@@ -4,12 +4,15 @@
         "http://www.hibernate.org/dtd/hibernate-configuration-3.0.dtd">
 <hibernate-configuration>
      <session-factory>
-        <property name="connection.url">jdbc:mysql://localhost:3306/spring-todo-list</property>
+        <property name="connection.url">jdbc:mysql://localhost:3306/spring-todo-list?useSSL=false</property>
         <property name="connection.driver_class">com.mysql.jdbc.Driver</property>
+         <property name="hibernate.connection.username">user</property>
+         <property name="hibernate.connection.password">user</property>
 
          <property name="hbm2ddl.auto">update</property>
          <property name="hibernate.dialect">org.hibernate.dialect.MySQLDialect</property>
          <property name="hibernate.show_sql">true</property>
+         <property name="show_sql">true</property>
 
          <mapping class="todolist.entities.TodoList"/>
          <mapping class="todolist.entities.Task"/>

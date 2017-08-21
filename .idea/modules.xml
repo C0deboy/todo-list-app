@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/spring-todo-list.iml" filepath="$PROJECT_DIR$/spring-todo-list.iml" />
+      <module fileurl="file://$PROJECT_DIR$/todo-list-app.iml" filepath="$PROJECT_DIR$/todo-list-app.iml" />
     </modules>
   </component>
 </project>

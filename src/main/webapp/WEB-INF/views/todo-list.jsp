@@ -15,8 +15,8 @@
 	
 	<title>Basic todo-list</title>
 	
-	<link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/main.css" />
-	<link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN">
+	<link rel="stylesheet" href="<c:url value="/resources/css/main.css" />" />
+	<link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
     <link rel="stylesheet" type="text/css" href="//fonts.googleapis.com/css?family=Ubuntu" />
 
 </head>
@@ -80,6 +80,6 @@
 		</button>
 	</form:form>
 	
-	<script src="${pageContext.request.contextPath}/resources/js/todo-list.js"></script>
+	<script src="<c:url value="/resources/js/todo-list.js" />"></script>
 </body>
 </html>
