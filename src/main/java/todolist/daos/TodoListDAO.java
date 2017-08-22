@@ -1,13 +1,16 @@
 package todolist.daos;
 
+import todolist.entities.Task;
 import todolist.entities.TodoList;
+import todolist.entities.User;
 
 import java.util.ArrayList;
 
 public interface TodoListDAO {
-    ArrayList<TodoList> getLists();
 
-    void addTask(TodoList todoList, String task);
+    ArrayList<TodoList> getTodolistsFor(User owner);
+
+    void addTask(Task task);
 
     void changeTaskName(int taskID, String task);
 

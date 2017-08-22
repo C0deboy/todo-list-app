@@ -25,6 +25,7 @@
 	<c:forEach var="list" items="${todoLists}">
 		<form:form class="todo-list" modelAttribute="todoList" method="post" action="manageTodoList">
             <form:hidden path="id" value="${list.id}"/>
+            <form:hidden path="ownerID"/>
 
 			<div class="list-title">
                 <form:input class="name" path="name" value="${list.name}" readonly="true"/>
@@ -72,9 +73,10 @@
             </button>
 		</form:form>
 	</c:forEach>
-	
+
 	<form:form class="addListForm" modelAttribute="todoList" method="post" action="addList">
 		<form:input path="name" placeholder="Dodaj nową listę"/>
+        <form:hidden path="ownerID"/>
 		<button class="add-btn">
 			<i class="fa fa-plus-square fa-lg"></i>
 		</button>

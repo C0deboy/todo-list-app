@@ -68,8 +68,8 @@ public class Task {
         return listReference;
     }
 
-    public void setListReference(TodoList listsByListId) {
-        this.listReference = listsByListId;
+    public void setListReference(TodoList listReference) {
+        this.listReference = listReference;
     }
 
     @Override

@@ -1,32 +1,25 @@
 package todolist.services;
 
-import org.springframework.transaction.annotation.Transactional;
+import todolist.entities.Task;
 import todolist.entities.TodoList;
+import todolist.entities.User;
 
 import java.util.ArrayList;
 
 public interface TodoListService {
-    @Transactional
-    ArrayList<TodoList> getLists();
+    ArrayList<TodoList> getTodolistsFor(User user);
 
-    @Transactional
-    void addTask(TodoList todoList, String task);
+    void addTask(Task task);
 
-    @Transactional
     void addTodoList(TodoList todoList);
 
-    @Transactional
     void deleteTodoList(TodoList todoList);
 
-    @Transactional
     void changeTodoListName(TodoList todoList);
 
-    @Transactional
     void deleteTask(int taskID);
 
-    @Transactional
     void changeTaskName(int taskID, String task);
 
-    @Transactional
     void toggleDone(byte done, int taskID);
 }

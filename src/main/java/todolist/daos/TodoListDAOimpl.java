@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import todolist.entities.Task;
 import todolist.entities.TodoList;
+import todolist.entities.User;
 
 import java.util.ArrayList;
 
@@ -16,22 +17,21 @@ public class TodoListDAOimpl implements TodoListDAO {
     @Autowired
     private SessionFactory sessionFactory;
 
- 	@Override
-    public ArrayList<TodoList> getLists() {
+    @Override
+    public ArrayList<TodoList> getTodolistsFor(User user) {
         Session currentSession = sessionFactory.getCurrentSession();
-		Query<TodoList> theQuery = currentSession.createQuery("from TodoList", TodoList.class);
-        return (ArrayList<TodoList>) theQuery.getResultList();
+		Query<TodoList> theQuery = currentSession.createQuery("from TodoList where ownerID =:ownerID", TodoList.class);
+		theQuery.setParameter("ownerID", user.getId());
+        ArrayList<TodoList> list = (ArrayList<TodoList>)theQuery.getResultList();
+        return list;
 	}
 
 	@Override
-    public void addTask(TodoList todoList, String task) {
+    public void addTask(Task task) {
 
 		Session currentSession = sessionFactory.getCurrentSession();
-		Task newTask = new Task();
-		newTask.setTask(task);
-		newTask.setListReference(todoList);
 
-		currentSession.save(newTask);
+		currentSession.save(task);
 
 	}
 
@@ -84,4 +84,6 @@ public class TodoListDAOimpl implements TodoListDAO {
         query.setParameter("taskID", taskID);
         query.executeUpdate();
 	}
+
+
 }

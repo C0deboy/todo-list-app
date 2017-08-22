@@ -9,7 +9,7 @@ import java.util.List;
 public class TodoList {
     private int id;
     private String name;
-//    private User usersByUserId;
+    private int ownerID;
     private List<Task> tasks = new ArrayList<>();
 
     @Id
@@ -32,6 +32,16 @@ public class TodoList {
         this.name = name;
     }
 
+    @Basic
+    @Column(name = "user_id")
+    public int getOwnerID() {
+        return ownerID;
+    }
+
+    public void setOwnerID(int ownerID) {
+        this.ownerID = ownerID;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -50,15 +60,15 @@ public class TodoList {
         return result;
     }
 
-//    @ManyToOne
-//    @JoinColumn(name = "user_id", referencedColumnName = "id", nullable = false)
-//    public User getUsersByUserId() {
-//        return usersByUserId;
-//    }
-//
-//    public void setUsersByUserId(User usersByUserId) {
-//        this.usersByUserId = usersByUserId;
-//    }
+    @Override
+    public String toString() {
+        return "TodoList{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", owner=" + ownerID +
+                ", tasks=" + tasks +
+                '}';
+    }
 
     @OneToMany(mappedBy = "listReference", fetch = FetchType.EAGER)
     @OrderBy("done")

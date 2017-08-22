@@ -25,22 +25,25 @@
 <h1 class="app-haeder">Todo list app</h1>
 
 <div class="login-dialog">
-    <c:if test="${not empty message}"><div class="center"><span class="message">${message}</span></div></c:if>
-
-    <form:form class="login-form" modelAttribute="user" action="logIn" method="post">
-        <form:label class="login-fields" path="login">
+    <form:form class="login-form" modelAttribute="user" action="signUp" method="post">
+        <form:label class="login-fields block" path="email">
+            Email
+            <form:input class="align-right" path="email"/>
+            <form:errors class="errors" path="email"/>
+        </form:label>
+        <form:label class="login-fields block" path="login">
             Login
-            <form:input path="login"/>
+            <form:input class="align-right" path="login"/>
             <form:errors class="errors" path="login"/>
         </form:label>
-        <form:label class="login-fields" path="password">
+        <form:label class="login-fields block" path="password">
             Password
-            <form:password path="password"/>
+            <form:password class="align-right" path="password"/>
             <form:errors class="errors" path="password"/>
         </form:label>
-        <form:button class="logIn-btn" href="logIn" >Log in!</form:button>
+        <br>
+        <form:button class="signUp-btn">Create an account!</form:button>
     </form:form>
-    <a class="signUp-btn" href="signUp" >Sign up!</a><a class="forgotPassword-btn" href="forgotPassword" >Forgot password?</a>
 </div>
 
 </body>

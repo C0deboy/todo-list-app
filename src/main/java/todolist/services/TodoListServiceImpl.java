@@ -4,7 +4,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import todolist.daos.TodoListDAO;
+import todolist.entities.Task;
 import todolist.entities.TodoList;
+import todolist.entities.User;
 
 import java.util.ArrayList;
 
@@ -16,14 +18,14 @@ public class TodoListServiceImpl implements TodoListService {
 
     @Override
     @Transactional
-    public ArrayList<TodoList> getLists() {
-        return todoListDAO.getLists();
+    public ArrayList<TodoList> getTodolistsFor(User user) {
+        return todoListDAO.getTodolistsFor(user);
     }
 
     @Override
     @Transactional
-    public void addTask(TodoList todoList, String task) {
-        todoListDAO.addTask(todoList, task);
+    public void addTask(Task task) {
+        todoListDAO.addTask(task);
     }
 
     @Override
