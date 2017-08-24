@@ -1,6 +1,7 @@
 package todolist.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -11,11 +12,15 @@ import todolist.entities.User;
 import todolist.services.UserService;
 
 import javax.validation.Valid;
+import java.util.Locale;
 
 @Controller
 public class LoginController {
     @Autowired
     private UserService userService;
+
+    @Autowired
+    private MessageSource messageSource;
 
     @GetMapping("/")
     public String index(Model model) {
@@ -27,22 +32,20 @@ public class LoginController {
     }
 
     @PostMapping("/logIn")
-    public String logIn(@Valid @ModelAttribute User user, BindingResult result) {
-
-        String userName = user.getLogin();
+    public String logIn(@ModelAttribute User user,  BindingResult result) {
+        String username = user.getLogin();
         String password = user.getPassword();
-        System.out.println("*"+password+"*");
 
-        if (!userService.isUserNameValid(userName)){
-            result.rejectValue("login", "invalidLogin", "Invalid login.");
+        if (!userService.isUserNameValid(username)){
+            result.rejectValue("login", "Invalid.login");
             return "index";
         }
-        else if (!userService.isPasswordValid(userName, password)) {
-            result.rejectValue("password", "invalidPassword","Invalid password");
+        else if (!userService.isUserValid(username, password)) {
+            result.rejectValue("password", "Invalid.password");
             return "index";
         }
         else {
-            return "redirect:/" + userName + "/your-todo-lists";
+            return "redirect:/" + user.getLogin() + "/your-todo-lists";
         }
     }
 
@@ -56,26 +59,19 @@ public class LoginController {
 
 
     @PostMapping("/signUp")
-    public String signUp(@ModelAttribute @Valid User user, BindingResult result, Model model) {
+    public String signUp(@Valid @ModelAttribute User user, BindingResult result, Model model) {
 
-        if (!userService.isEmailAvailable(user.getEmail())){
-            result.rejectValue("email", "invalidEmail", "This email already exists.");
-
+        if (result.hasErrors()){
             return "signup";
         }
-        else if (userService.isUserNameValid(user.getLogin())){
-            result.rejectValue("login", "invalidLogin", "This username already exists.");
+        else {
+            userService.addUser(user);
+            String signupSuccessMsg = messageSource.getMessage("Registration.success", new String[] {user.getLogin()}, Locale.ENGLISH);
 
-            return "signup";
+            model.addAttribute("user", user);
+            model.addAttribute("message", signupSuccessMsg);
+
+            return "index";
         }
-        else if (result.hasErrors()){
-            return "signup";
-        }
-
-        userService.addUser(user);
-        model.addAttribute("message",  "Your account has been created. Log in.");
-
-        return "index";
-
     }
 }

@@ -3,9 +3,8 @@ package todolist.daos;
 import todolist.entities.User;
 
 public interface UserDAO {
-    User getUser(String username);
+    User getUserByName(String username);
     User getUser(String username, String password);
+    User getUserByEmail(String email);
     void addUser(User user);
-
-    boolean isEmailAvailable(String email);
 }

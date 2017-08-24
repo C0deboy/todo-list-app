@@ -3,7 +3,7 @@
 <%@ page contentType="text/html; charset=UTF-8" %>
 
 <!doctype html>
-<html>
+<html lang="en">
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -22,7 +22,7 @@
 </head>
 <body>
 
-<h1 class="app-haeder">Todo list app</h1>
+<a class="app-haeder" href="<c:url value="/"/>">Todo list app</a>
 
 <div class="login-dialog">
     <form:form class="login-form" modelAttribute="user" action="signUp" method="post">

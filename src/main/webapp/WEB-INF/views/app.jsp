@@ -3,7 +3,7 @@
 <%@ page contentType="text/html; charset=UTF-8" %>
 
 <!doctype html>
-<html>
+<html lang="en">
 <head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -21,7 +21,11 @@
 
 </head>
 <body>
+<nav class="navbar">
+	<a class="app-haeder mini" href="<c:url value="/"/>">Todo list app</a>
 
+	<button class="user-btn">${user.login}  <i class="fa fa-user" aria-hidden="true"></i></button>
+</nav>
 	<c:forEach var="list" items="${todoLists}">
 		<form:form class="todo-list" modelAttribute="todoList" method="post" action="manageTodoList">
             <form:hidden path="id" value="${list.id}"/>

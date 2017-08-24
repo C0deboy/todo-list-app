@@ -15,19 +15,12 @@ public class UserDAOimpl implements UserDAO {
     private SessionFactory sessionFactory;
 
     @Override
-    public User getUser(String userName) {
+    public User getUserByName(String userName) {
         Session currentSession = sessionFactory.getCurrentSession();
         Query<User> query = currentSession.createQuery("from User  where login =:login", User.class);
         query.setParameter("login", userName);
-        User user;
-        try {
-            user = query.getSingleResult();
-        }
-        catch (NoResultException e) {
-            user = null;
-        }
-
-        return user;
+        System.out.println(query.uniqueResult());
+        return query.uniqueResult();
     }
 
     @Override
@@ -47,10 +40,10 @@ public class UserDAOimpl implements UserDAO {
     }
 
     @Override
-    public boolean isEmailAvailable(String email) {
+    public User getUserByEmail(String email) {
         Session currentSession = sessionFactory.getCurrentSession();
         Query<User> query = currentSession.createQuery("from User where email =:email", User.class);
         query.setParameter("email", email);
-        return query.uniqueResult() == null;
+        return query.uniqueResult();
     }
 }

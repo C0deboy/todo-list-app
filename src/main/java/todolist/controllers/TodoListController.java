@@ -28,6 +28,8 @@ public class TodoListController {
     public String getListsForUser(@PathVariable("user") String userName, Model model) {
         User user = userService.getUser(userName);
 
+        model.addAttribute(user);
+
         ArrayList<TodoList> todoLists = todoListService.getTodolistsFor(user);
 
         model.addAttribute("todoLists", todoLists);

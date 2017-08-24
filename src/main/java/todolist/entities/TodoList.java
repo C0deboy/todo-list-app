@@ -13,6 +13,7 @@ public class TodoList {
     private List<Task> tasks = new ArrayList<>();
 
     @Id
+    @GeneratedValue
     @Column(name = "id")
     public int getId() {
         return id;

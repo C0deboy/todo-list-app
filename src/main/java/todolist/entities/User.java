@@ -1,19 +1,26 @@
 package todolist.entities;
 
-import org.hibernate.validator.constraints.NotEmpty;
+import todolist.validators.ValidEmail;
+import todolist.validators.ValidLogin;
+import todolist.validators.ValidPassword;
 
 import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.List;
 
 @Entity
 @Table(name = "users", schema = "spring-todo-list")
 public class User {
     private int id;
+
+    @ValidLogin
     private String login;
+
+    @ValidPassword
     private String password;
+
+    @ValidEmail
     private String email;
-    private List<TodoList> todoLists = new ArrayList<>();
+
+    //private List<TodoList> todoLists = new ArrayList<>();
 
     @Id
     @Column(name = "id")
@@ -37,7 +44,6 @@ public class User {
 
     @Basic
     @Column(name = "password")
-    @NotEmpty(message = "Password cannot be empty.")
     public String getPassword() {
         return password;
     }
@@ -90,12 +96,12 @@ public class User {
                 '}';
     }
 
-    @OneToMany(mappedBy = "tasks")
-    public List<TodoList> getTodoLists() {
-        return todoLists;
-    }
-
-    public void setTodoLists(List<TodoList> todoLists) {
-        this.todoLists = todoLists;
-    }
+//    @OneToMany(mappedBy = "tasks")
+//    public List<TodoList> getTodoLists() {
+//        return todoLists;
+//    }
+//
+//    public void setTodoLists(List<TodoList> todoLists) {
+//        this.todoLists = todoLists;
+//    }
 }

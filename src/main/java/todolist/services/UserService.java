@@ -8,7 +8,7 @@ public interface UserService {
 
     boolean isUserNameValid(String userName);
     
-    boolean isPasswordValid(String userName, String password);
+    boolean isUserValid(String userName, String password);
 
     void addUser(User user);
 

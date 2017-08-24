@@ -15,27 +15,34 @@ public class UserServiceImpl implements UserService {
     @Override
     @Transactional
     public User getUser(String userName) {
-        return userDAO.getUser(userName);
+        return userDAO.getUserByName(userName);
     }
 
     @Override
     @Transactional
     public boolean isUserNameValid(String userName) {
-        User user = userDAO.getUser(userName);
-        return user != null;
+        if  (userDAO.getUserByName(userName) == null)
+            return false;
+        else
+            return true;
     }
 
     @Override
     @Transactional
-    public boolean isPasswordValid(String userName, String password) {
-        User user = userDAO.getUser(userName, password);
-        return user != null;
+    public boolean isUserValid(String userName, String password) {
+        if  (userDAO.getUser(userName, password) == null)
+            return false;
+        else
+            return true;
     }
 
     @Transactional
     @Override
     public boolean isEmailAvailable(String email) {
-        return userDAO.isEmailAvailable(email);
+        if  (userDAO.getUserByEmail(email) == null)
+            return true;
+        else
+            return false;
     }
 
     @Override

@@ -5,6 +5,23 @@ html, body {
 	font-family: Ubuntu;
 }
 
+.navbar {
+  background: #d7d7d7;
+  padding: 5px;
+  margin-bottom: 5px;
+  border-bottom: 1px solid #989898;
+  font-size: 1.5em;
+}
+
+.user-btn {
+  float: right;
+  padding: 5px;
+  font-size: inherit;
+  border: none;
+  background: none;
+  cursor: pointer;
+}
+
 .todo-list {
 	background: rgb(7, 127, 214);
 	border: solid 3px #0d2893;
@@ -25,6 +42,7 @@ html, body {
 	margin: 5px 1px 0;
 	padding: 2px;
 	opacity: 1;
+	vertical-align: bottom;
 }
 
 .list-title {
@@ -33,7 +51,7 @@ html, body {
 	border-radius: 5px;
 	padding: 5px;
 	position: relative;
-	font-size: 20px;
+	font-size: 1.4em;
 	font-weight: bold;
 }
 
@@ -60,7 +78,7 @@ html, body {
 .name {
 	background: inherit;
 	border: none;
-	font-size: 18px;
+	font-size: 1.1em;
 	color: inherit;
 	resize: none;
 	width: 92%;
@@ -106,14 +124,27 @@ html, body {
   border-radius: 5px;
   margin: 80px auto;
   padding: 10px;
+  text-decoration: none;
   width: 245px;
+  display: block;
+  font-size: 2em;
+  font-weight: bold;
+}
+
+.app-haeder.mini{
+  border-radius: 5px;
+  padding: 4px;
+  width: 245px;
+  margin: 0;
+  font-size: inherit;
+  display: inline-block;
 }
 
 .login-dialog {
 	position: absolute;
 	top: 50%;
 	left: 50%;
-	transform: translate(-50%, -10%);
+	transform: translate(-50%, -35%);
 	font-size: 2em;
 }
 .login-form {
@@ -176,6 +207,7 @@ html, body {
 	font-size: 0.7em;
 	display: block;
 	color: tomato;
+	position: absolute;
 }
 
 .login-fields {
@@ -189,6 +221,7 @@ html, body {
 
 .block {
   display: block;
+  margin-bottom: 60px;
 }
 
 .message {
