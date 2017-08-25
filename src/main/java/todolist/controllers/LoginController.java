@@ -40,7 +40,7 @@ public class LoginController {
             result.rejectValue("login", "Invalid.login");
             return "index";
         }
-        else if (!userService.isUserValid(username, password)) {
+        else if (!userService.isPasswordValid(username, password)) {
             result.rejectValue("password", "Invalid.password");
             return "index";
         }

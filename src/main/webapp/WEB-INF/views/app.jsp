@@ -13,7 +13,7 @@
 	<meta name="msapplication-navbutton-color" content="#0376a5">
 	<meta name="apple-mobile-web-app-status-bar-style" content="#0376a5">
 	
-	<title>Basic todo-list</title>
+	<title>Todo-list-app</title>
 	
 	<link rel="stylesheet" href="<c:url value="/resources/css/main.css" />" />
 	<link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">

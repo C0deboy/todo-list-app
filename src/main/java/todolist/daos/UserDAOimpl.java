@@ -19,7 +19,6 @@ public class UserDAOimpl implements UserDAO {
         Session currentSession = sessionFactory.getCurrentSession();
         Query<User> query = currentSession.createQuery("from User  where login =:login", User.class);
         query.setParameter("login", userName);
-        System.out.println(query.uniqueResult());
         return query.uniqueResult();
     }
 
