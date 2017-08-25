@@ -17,6 +17,7 @@ html, body {
   float: right;
   padding: 5px;
   font-size: inherit;
+  margin-right: 10px;
   border: none;
   background: none;
   cursor: pointer;
