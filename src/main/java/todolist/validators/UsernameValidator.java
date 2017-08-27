@@ -6,11 +6,11 @@ import todolist.services.UserService;
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
 
-public class LoginValidator implements ConstraintValidator<ValidLogin, String> {
+public class UsernameValidator implements ConstraintValidator<ValidUsername, String> {
     @Autowired
     UserService userService;
 
-   public void initialize(ValidLogin constraint) {
+   public void initialize(ValidUsername constraint) {
    }
 
    public boolean isValid(String login, ConstraintValidatorContext context) {

@@ -7,22 +7,53 @@ html, body {
 
 .navbar {
   background: #d7d7d7;
-  padding: 5px;
   margin-bottom: 5px;
   border-bottom: 1px solid #989898;
   font-size: 1.5em;
 }
 
-.user-btn {
-  float: right;
-  padding: 5px;
-  font-size: inherit;
-  margin-right: 10px;
-  border: none;
-  background: none;
-  cursor: pointer;
+.user-options-container {
+	float: right;
 }
 
+.toggle-user-options-btn {
+  font-size: inherit;
+  padding: 9px;
+  border: none;
+  background: #d7d7d7;
+  cursor: pointer;
+  width: 100%;
+  text-align: right;
+}
+
+.toggle-user-options-btn:hover {
+  outline: none;
+}
+
+.user-options {
+	display: none;
+	font-size: inherit;
+	margin: 0;
+	list-style: none;
+	padding: 0;
+	border-bottom-left-radius: 5px;
+}
+
+.user-options a {
+	display: block;
+	padding: 5px 8px;
+	border-top: 1px solid #8b8b8b;
+	text-decoration: none;
+	color: #d9e5f2;
+	background: #073679;
+}
+
+.fa-sign-out {
+  margin-right: -2px;
+}
+.fa-trash-o {
+  padding: 0 2px 4px;
+}
 .todo-list {
 	background: rgb(7, 127, 214);
 	border: solid 3px #0d2893;
@@ -118,7 +149,7 @@ html, body {
 
 /*Login page*/
 
-.app-haeder{
+.app-header{
   color: aliceblue;
   background: #073679;
   text-align: center;
@@ -132,11 +163,11 @@ html, body {
   font-weight: bold;
 }
 
-.app-haeder.mini{
+.app-header.mini{
   border-radius: 5px;
   padding: 4px;
   width: 245px;
-  margin: 0;
+  margin: 5px;
   font-size: inherit;
   display: inline-block;
 }
@@ -150,7 +181,7 @@ html, body {
 }
 .login-form {
 	display: block;
-	padding: 20px 0;
+	padding: 35px 0;
 }
 
 .login-form input {
@@ -169,12 +200,12 @@ html, body {
 	.login-form input {
 		display: block;
 	}
-  .logIn-btn {
+  .login-btn {
     margin: 25px 0 20px;
   }
 }
 
-.logIn-btn {
+.login-btn {
 	display: inline-block;
 	background: #073679;
 	font-size: 0.7em;
@@ -186,7 +217,7 @@ html, body {
 	border: none;
 }
 
-.signUp-btn {
+.signup-btn {
 	display: inline-block;
 	background: #c13e3e;
 	font-size: 0.7em;
@@ -218,6 +249,7 @@ html, body {
 
 .align-right {
   float: right;
+  margin-left: 10px;
 }
 
 .block {
@@ -234,6 +266,25 @@ html, body {
   color: #1e73bd;
 }
 
-.center {
-  text-align: center;
+.absolute-off {
+  position: relative;
+}
+
+.task:hover,
+.toggle-user-options-btn:hover {
+  -webkit-filter: brightness(92%);
+  -webkit-transition: all 0.3s;
+  -moz-transition: all 0.3s;
+  -o-transition: all 0.3s;
+  -ms-transition: all 0.3s;
+  transition: all 0.3s;
+}
+.list-title:hover,
+.user-options a:hover {
+  -webkit-filter: brightness(125%);
+  -webkit-transition: all 0.3s;
+  -moz-transition: all 0.3s;
+  -o-transition: all 0.3s;
+  -ms-transition: all 0.3s;
+  transition: all 0.3s;
 }

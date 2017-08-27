@@ -1,14 +1,13 @@
 package todolist.services;
 
+import org.springframework.transaction.annotation.Transactional;
 import todolist.entities.User;
 
 public interface UserService {
     
-    User getUser(String userName);
+    User getUserByName(String username);
 
-    boolean isUserNameValid(String userName);
-    
-    boolean isPasswordValid(String userName, String password);
+    boolean isUserNameValid(String username);
 
     void addUser(User user);
 

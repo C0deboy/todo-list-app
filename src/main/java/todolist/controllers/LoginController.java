@@ -22,35 +22,43 @@ public class LoginController {
     @Autowired
     private MessageSource messageSource;
 
-    @GetMapping("/")
+    @GetMapping(value = {"/"})
     public String index(Model model) {
 
         User user = new User();
         model.addAttribute(user);
 
-        return "index";
+        return "redirect:/login";
     }
 
-    @PostMapping("/logIn")
-    public String logIn(@ModelAttribute User user,  BindingResult result) {
-        String username = user.getLogin();
-        String password = user.getPassword();
 
-        if (!userService.isUserNameValid(username)){
-            result.rejectValue("login", "Invalid.login");
-            return "index";
+    @GetMapping("/login")
+    public String login(@ModelAttribute User user,  BindingResult result, String error, String logout, Model model) {
+
+        if(logout != null) {
+            String logoutMsg = messageSource.getMessage("Logout.success", new String[]{}, Locale.ENGLISH);
+            model.addAttribute("message", logoutMsg);
         }
-        else if (!userService.isPasswordValid(username, password)) {
-            result.rejectValue("password", "Invalid.password");
-            return "index";
+
+        if (error != null) {
+            result.rejectValue("username", "Invalid.credentials");
         }
-        else {
-            return "redirect:/" + user.getLogin() + "/your-todo-lists";
-        }
+
+        return "login";
     }
 
-    @GetMapping("/signUp")
-    public String signUp(Model model) {
+    @GetMapping("/accessDenied")
+    public String accessDenied(Model model) {
+
+
+        String logoutMsg = messageSource.getMessage("Access.denied", new String[]{}, Locale.ENGLISH);
+        model.addAttribute("message", logoutMsg);
+
+        return "access-denied";
+    }
+
+    @GetMapping("/signup")
+    public String signup(Model model) {
         User user = new User();
         model.addAttribute(user);
 
@@ -58,20 +66,20 @@ public class LoginController {
     }
 
 
-    @PostMapping("/signUp")
-    public String signUp(@Valid @ModelAttribute User user, BindingResult result, Model model) {
+    @PostMapping("/signup")
+    public String signup(@Valid @ModelAttribute User user, BindingResult result, Model model) {
 
         if (result.hasErrors()){
             return "signup";
         }
         else {
             userService.addUser(user);
-            String signupSuccessMsg = messageSource.getMessage("Registration.success", new String[] {user.getLogin()}, Locale.ENGLISH);
+            String signupSuccessMsg = messageSource.getMessage("Registration.success", new String[] {user.getUsername()}, Locale.ENGLISH);
 
             model.addAttribute("user", user);
             model.addAttribute("message", signupSuccessMsg);
 
-            return "index";
+            return "login";
         }
     }
 }

@@ -1,11 +1,19 @@
 package todolist.services;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import todolist.daos.UserDAO;
 import todolist.entities.User;
+
+import java.util.HashSet;
+import java.util.Set;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -17,14 +25,14 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional
-    public User getUser(String userName) {
-        return userDAO.getUserByName(userName);
+    public User getUserByName(String username) {
+        return userDAO.getUserByName(username);
     }
 
     @Override
     @Transactional
-    public boolean isUserNameValid(String userName) {
-        if  (userDAO.getUserByName(userName) == null)
+    public boolean isUserNameValid(String username) {
+        if  (userDAO.getUserByName(username) == null)
             return false;
         else
             return true;
@@ -32,22 +40,6 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional
-    public boolean isPasswordValid(String userName, String password) {
-        User user = userDAO.getUserByName(userName);
-        if  (user == null) {
-            System.out.println("User " + userName + "not found. Password validation failed.");
-            return false;
-        }
-        else if (bCryptPasswordEncoder.matches(password, user.getPassword())) {
-            return true;
-        }
-        else {
-            return false;
-        }
-    }
-
-    @Transactional
-    @Override
     public boolean isEmailAvailable(String email) {
         if  (userDAO.getUserByEmail(email) == null)
             return true;

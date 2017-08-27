@@ -62,3 +62,21 @@ function autoHeight(element) {
   element.style.height = '25px';
   element.style.height = (element.scrollHeight) + 'px';
 }
+
+document.querySelector('.toggle-user-options-btn').addEventListener('click', toggleUserOptions);
+document.querySelector('.toggle-user-options-btn').addEventListener('mouseleave', (e) => e.target.blur());
+document.querySelector('.user-options-container').addEventListener('mouseleave', toggleUserOptions);
+
+function toggleUserOptions() {
+  const userOptionsElement =  document.querySelector('.user-options');
+  let displayed = false;
+
+  if (userOptionsElement.style.display === "block"){
+    userOptionsElement.style.display = "none";
+    displayed = false;
+  } else {
+    userOptionsElement.style.display = "block";
+    displayed = true;
+  }
+
+}

@@ -16,7 +16,7 @@
 
     <title>Todo-list-app</title>
 
-    <link rel="stylesheet" href="<c:url value="/resources/css/main.css" />" />
+    <link rel="stylesheet" href="${contextPath}/resources/css/main.css" />
     <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
     <link rel="stylesheet" type="text/css" href="//fonts.googleapis.com/css?family=Ubuntu" />
 
@@ -26,25 +26,7 @@
 <a class="app-header" href="${contextPath}">Todo list app</a>
 
 <div class="login-dialog">
-    <form:form class="login-form" modelAttribute="user" action="signup" method="post">
-        <form:label class="login-fields block" path="email">
-            Email
-            <form:input class="align-right" path="email"/>
-            <form:errors class="errors" path="email"/>
-        </form:label>
-        <form:label class="login-fields block" path="username">
-            Login
-            <form:input class="align-right" path="username"/>
-            <form:errors class="errors" path="username"/>
-        </form:label>
-        <form:label class="login-fields block" path="password">
-            Password
-            <form:password class="align-right" path="password"/>
-            <form:errors class="errors" path="password"/>
-        </form:label>
-        <br>
-        <form:button class="signup-btn">Create an account!</form:button>
-    </form:form>
+    <span class="message absolute-off">${message}</span>
 </div>
 
 </body>

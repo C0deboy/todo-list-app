@@ -1,7 +1,7 @@
 package todolist.entities;
 
 import todolist.validators.ValidEmail;
-import todolist.validators.ValidLogin;
+import todolist.validators.ValidUsername;
 import todolist.validators.ValidPassword;
 
 import javax.persistence.*;
@@ -11,14 +11,16 @@ import javax.persistence.*;
 public class User {
     private int id;
 
-    @ValidLogin
-    private String login;
+    @ValidUsername
+    private String username;
 
     @ValidPassword
     private String password;
 
     @ValidEmail
     private String email;
+
+    private String role = "USER";
 
     //private List<TodoList> todoLists = new ArrayList<>();
 
@@ -33,13 +35,13 @@ public class User {
     }
 
     @Basic
-    @Column(name = "login")
-    public String getLogin() {
-        return login;
+    @Column(name = "username")
+    public String getUsername() {
+        return username;
     }
 
-    public void setLogin(String login) {
-        this.login = login;
+    public void setUsername(String login) {
+        this.username = login;
     }
 
     @Basic
@@ -70,7 +72,7 @@ public class User {
         User user = (User) o;
 
         if (id != user.id) return false;
-        if (login != null ? !login.equals(user.login) : user.login != null) return false;
+        if (username != null ? !username.equals(user.username) : user.username != null) return false;
         if (password != null ? !password.equals(user.password) : user.password != null) return false;
         if (email != null ? !email.equals(user.email) : user.email != null) return false;
 
@@ -80,7 +82,7 @@ public class User {
     @Override
     public int hashCode() {
         int result = id;
-        result = 31 * result + (login != null ? login.hashCode() : 0);
+        result = 31 * result + (username != null ? username.hashCode() : 0);
         result = 31 * result + (password != null ? password.hashCode() : 0);
         result = 31 * result + (email != null ? email.hashCode() : 0);
         return result;
@@ -90,10 +92,20 @@ public class User {
     public String toString() {
         return "User{" +
                 "id=" + id +
-                ", login='" + login + '\'' +
+                ", login='" + username + '\'' +
                 ", password='" + password + '\'' +
                 ", email='" + email + '\'' +
                 '}';
+    }
+
+    @Basic
+    @Column(name = "role")
+    public String getRole() {
+        return role;
+    }
+
+    public void setRole(String role) {
+        this.role = role;
     }
 
 //    @OneToMany(mappedBy = "tasks")
