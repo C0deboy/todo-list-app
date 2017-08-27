@@ -13,16 +13,17 @@
         <intercept-url pattern="/login"  access="permitAll()"/>
         <intercept-url pattern="/signup"  access="permitAll()"/>
         <intercept-url pattern="/resources/**"  access="permitAll()"/>
-        <intercept-url pattern="/*/your-todo-lists/**"  access="isAuthenticated()"/>
-        <intercept-url pattern="/**"  access="denyAll()"/>
+        <intercept-url pattern="/*/your-todo-lists/**"  access="hasAnyAuthority({'USER', 'ADMIN'})"/>
+        <intercept-url pattern="/**"  access="hasAuthority('ADMIN')"/>
 
         <form-login login-page="/login"
                     login-processing-url="/login"
                     authentication-success-handler-ref="authenticationSuccessHandler"
                     username-parameter="username"
                     password-parameter="password"/>
+        <remember-me key="uniqueAndSecret"/>
 
-        <logout logout-success-url="/login?logout"/>
+        <logout logout-success-url="/login?logout" delete-cookies="JSESSIONID"/>
 
         <access-denied-handler error-page="/accessDenied"/>
 

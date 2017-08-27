@@ -14,10 +14,10 @@ import java.lang.annotation.Target;
 @Target(ElementType.FIELD)
 @Retention(RetentionPolicy.RUNTIME)
 @NotEmpty
-@Pattern(regexp = "^[a-zA-Z0-9]+$")
+@Pattern(regexp = "^[a-zA-Z0-9]*$")
 @Length.List({
-        @Length(min = 3 , message = "{Length.min.user.login}"),
-        @Length(max = 30, message = "{Length.max.user.login}")
+        @Length(min = 3 , message = "{Length.min.user.username}"),
+        @Length(max = 30, message = "{Length.max.user.username}")
 })
 public @interface ValidUsername {
 

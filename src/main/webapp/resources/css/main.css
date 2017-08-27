@@ -3,13 +3,21 @@ html, body {
 	margin: 0;
 	background: #e3e3e3;
 	font-family: Ubuntu;
+	padding-top: 25px;
+	overflow: hidden;
 }
+
+.app {overflow-x: scroll;height: 100vh;}
 
 .navbar {
   background: #d7d7d7;
-  margin-bottom: 5px;
   border-bottom: 1px solid #989898;
   font-size: 1.5em;
+  z-index: 999;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
 }
 
 .user-options-container {
@@ -33,6 +41,8 @@ html, body {
 .user-options {
 	display: none;
 	font-size: inherit;
+	position: absolute;
+	right: 0;
 	margin: 0;
 	list-style: none;
 	padding: 0;
@@ -45,7 +55,7 @@ html, body {
 	border-top: 1px solid #8b8b8b;
 	text-decoration: none;
 	color: #d9e5f2;
-	background: #073679;
+	background: #585858;
 }
 
 .fa-sign-out {
@@ -176,7 +186,7 @@ html, body {
 	position: absolute;
 	top: 50%;
 	left: 50%;
-	transform: translate(-50%, -35%);
+	transform: translate(-50%, -40%);
 	font-size: 2em;
 }
 .login-form {
@@ -184,25 +194,25 @@ html, body {
 	padding: 35px 0;
 }
 
+.login-fields {
+  display: inline-block;
+  vertical-align: top;
+}
+
 .login-form input {
 	height: 26px;
 	font-size: 0.8em;
 	width: 245px;
 	vertical-align: text-bottom;
-	margin-left: 7px;
+	=: 7px
 }
 
-@media (max-width: 850px) {
-  .login-form {
-    width: 245px;
-    text-align: center;
-  }
-	.login-form input {
-		display: block;
-	}
-  .login-btn {
-    margin: 25px 0 20px;
-  }
+.remember-me {
+	display: inline-block;
+	position: absolute;
+	text-align: right;
+	font-size: 0.52em;
+	margin-top: -15px;
 }
 
 .login-btn {
@@ -236,15 +246,13 @@ html, body {
 }
 
 .errors {
-	font-size: 0.7em;
+	font-size: 0.5em;
 	display: block;
 	color: tomato;
 	position: absolute;
-}
-
-.login-fields {
-  display: inline-block;
-  vertical-align: top;
+	width: 110%;
+	text-align: left;
+	white-space: normal;
 }
 
 .align-right {
@@ -288,3 +296,64 @@ html, body {
   -ms-transition: all 0.3s;
   transition: all 0.3s;
 }
+
+@media (max-width: 850px) {
+  .login-dialog {
+    text-align: center;
+  }
+  .login-fields,
+  .login-form input {
+    display: block;
+  }
+  .login-fields {
+    white-space: normal;
+    margin-bottom: 15px;
+  }
+  
+  .login-btn {
+    margin: 30px 0 20px;
+  }
+  .remember-me {
+    margin-top: 5px;
+  }
+  .forgotPassword-btn {
+    display: block;
+    float: none;
+    margin-top: 15px;
+  }
+  .message {
+    display: inline-block;
+    margin-top: 10px;
+    position: relative;
+    white-space: pre-wrap;
+    width: 65vw;
+  }
+
+  .block .errors {
+    margin-top: 33px;
+  }
+
+  .app-header {
+    margin-top: 0;
+  }
+
+  .login-form input {
+    display: block;
+    width: 100%;
+  }
+
+  .app-header.mini {
+    width: 150px;
+  }
+
+  .block {
+    margin-bottom: 65px;
+  }
+}
+
+.remember-me input {
+  width: auto;
+  height: auto;
+  display: initial;
+}
+  

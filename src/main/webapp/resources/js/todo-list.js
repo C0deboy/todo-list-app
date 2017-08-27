@@ -65,7 +65,7 @@ function autoHeight(element) {
 
 document.querySelector('.toggle-user-options-btn').addEventListener('click', toggleUserOptions);
 document.querySelector('.toggle-user-options-btn').addEventListener('mouseleave', (e) => e.target.blur());
-document.querySelector('.user-options-container').addEventListener('mouseleave', toggleUserOptions);
+document.querySelector('.user-options').addEventListener('mouseleave', toggleUserOptions);
 
 function toggleUserOptions() {
   const userOptionsElement =  document.querySelector('.user-options');

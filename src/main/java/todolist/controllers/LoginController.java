@@ -8,6 +8,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import todolist.entities.User;
 import todolist.services.UserService;
 
@@ -36,7 +37,7 @@ public class LoginController {
     public String login(@ModelAttribute User user,  BindingResult result, String error, String logout, Model model) {
 
         if(logout != null) {
-            String logoutMsg = messageSource.getMessage("Logout.success", new String[]{}, Locale.ENGLISH);
+            String logoutMsg = messageSource.getMessage("Logout.success", null, Locale.ENGLISH);
             model.addAttribute("message", logoutMsg);
         }
 
@@ -51,8 +52,8 @@ public class LoginController {
     public String accessDenied(Model model) {
 
 
-        String logoutMsg = messageSource.getMessage("Access.denied", new String[]{}, Locale.ENGLISH);
-        model.addAttribute("message", logoutMsg);
+        String accessDeniedMsg = messageSource.getMessage("Access.denied", null, Locale.ENGLISH);
+        model.addAttribute("message", accessDeniedMsg);
 
         return "access-denied";
     }
@@ -67,7 +68,7 @@ public class LoginController {
 
 
     @PostMapping("/signup")
-    public String signup(@Valid @ModelAttribute User user, BindingResult result, Model model) {
+    public String signup(@Valid @ModelAttribute User user, BindingResult result, Model model, RedirectAttributes redirectAttributes) {
 
         if (result.hasErrors()){
             return "signup";

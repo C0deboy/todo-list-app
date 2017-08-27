@@ -8,7 +8,7 @@
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
     <meta name="theme-color" content="#0376a5">
     <meta name="msapplication-navbutton-color" content="#0376a5">
@@ -17,7 +17,6 @@
     <title>Todo-list-app</title>
 
     <link rel="stylesheet" href="${contextPath}/resources/css/main.css" />
-    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
     <link rel="stylesheet" type="text/css" href="//fonts.googleapis.com/css?family=Ubuntu" />
 
 </head>
@@ -30,7 +29,7 @@
 
     <form:form class="login-form" modelAttribute="user" action="login" method="post">
         <form:label class="login-fields" path="username">
-            Login
+            Username
             <form:input path="username"/>
             <form:errors class="errors" path="username"/>
         </form:label>
@@ -39,8 +38,12 @@
             <form:password path="password"/>
             <form:errors class="errors" path="password"/>
         </form:label>
+        <label class="remember-me">Remember me
+            <input type="checkbox" name="remember-me"/>
+        </label>
         <form:button class="login-btn" href="login" >Log in!</form:button>
     </form:form>
+
     <a class="signup-btn" href="signup" >Sign up!</a><a class="forgotPassword-btn" href="${contextPath}/forgotPassword" >Forgot password?</a>
 </div>
 
