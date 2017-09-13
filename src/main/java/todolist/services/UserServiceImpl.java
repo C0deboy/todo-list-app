@@ -31,11 +31,11 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional
-    public boolean isUserNameValid(String username) {
+    public boolean isUsernameAvailable(String username) {
         if  (userDAO.getUserByName(username) == null)
-            return false;
-        else
             return true;
+        else
+            return false;
     }
 
     @Override
@@ -52,5 +52,10 @@ public class UserServiceImpl implements UserService {
     public void addUser(User user) {
         user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
         userDAO.addUser(user);
+    }
+
+    @Override
+    public void removeUser(User user) {
+        userDAO.removeUser(user);
     }
 }

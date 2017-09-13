@@ -7,9 +7,11 @@ public interface UserService {
     
     User getUserByName(String username);
 
-    boolean isUserNameValid(String username);
+    boolean isUsernameAvailable(String username);
 
     void addUser(User user);
+
+    void removeUser(User user);
 
     boolean isEmailAvailable(String email);
 }

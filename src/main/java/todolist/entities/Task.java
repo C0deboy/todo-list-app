@@ -11,7 +11,6 @@ public class Task {
     private TodoList listReference;
 
     @Id
-    @GeneratedValue
     @Column(name = "id")
     public int getId() {
         return id;
@@ -53,6 +52,14 @@ public class Task {
         if (task != null ? !task.equals(task1.task) : task1.task != null) return false;
 
         return true;
+    }
+
+    public Task() {
+    }
+
+    public Task(String task, TodoList listReference) {
+        this.task = task;
+        this.listReference = listReference;
     }
 
     @Override

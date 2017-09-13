@@ -16,9 +16,6 @@ import todolist.services.UserService;
 import java.security.Principal;
 import java.util.ArrayList;
 
-/**
- * Servlet implementation class TodoListController
- */
 @Controller
 public class TodoListController {
 

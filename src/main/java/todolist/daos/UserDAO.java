@@ -7,4 +7,5 @@ public interface UserDAO {
     User getUser(String username, String password);
     User getUserByEmail(String email);
     void addUser(User user);
+    void removeUser(User user);
 }

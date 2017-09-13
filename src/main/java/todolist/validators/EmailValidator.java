@@ -20,6 +20,5 @@ public class EmailValidator implements ConstraintValidator<ValidEmail, String> {
       catch (NullPointerException e){
           return true;
       }
-
    }
 }

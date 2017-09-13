@@ -17,12 +17,16 @@ public class TodoListDAOimpl implements TodoListDAO {
     @Autowired
     private SessionFactory sessionFactory;
 
+    public SessionFactory getSessionFactory() {
+        return sessionFactory;
+    }
+
     @Override
     public ArrayList<TodoList> getTodolistsFor(User user) {
         Session currentSession = sessionFactory.getCurrentSession();
 		Query<TodoList> theQuery = currentSession.createQuery("from TodoList where ownerID =:ownerID", TodoList.class);
 		theQuery.setParameter("ownerID", user.getId());
-        ArrayList<TodoList> list = (ArrayList<TodoList>)theQuery.getResultList();
+        ArrayList<TodoList> list = (ArrayList<TodoList>) theQuery.getResultList();
         return list;
 	}
 

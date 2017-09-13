@@ -1,5 +1,6 @@
 package todolist.daos;
 
+import org.hibernate.SessionFactory;
 import todolist.entities.Task;
 import todolist.entities.TodoList;
 import todolist.entities.User;
@@ -7,6 +8,8 @@ import todolist.entities.User;
 import java.util.ArrayList;
 
 public interface TodoListDAO {
+
+    SessionFactory getSessionFactory();
 
     ArrayList<TodoList> getTodolistsFor(User owner);
 

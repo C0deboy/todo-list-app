@@ -15,7 +15,7 @@ public class UsernameValidator implements ConstraintValidator<ValidUsername, Str
 
    public boolean isValid(String login, ConstraintValidatorContext context) {
        try {
-           return !userService.isUserNameValid(login);
+           return userService.isUsernameAvailable(login);
        }
        catch (NullPointerException e){
            return true;

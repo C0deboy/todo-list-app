@@ -1,0 +1,25 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!DOCTYPE hibernate-configuration PUBLIC
+        "-//Hibernate/Hibernate Configuration DTD//EN"
+        "http://www.hibernate.org/dtd/hibernate-configuration-3.0.dtd">
+<hibernate-configuration>
+     <session-factory>
+        <property name="connection.url">jdbc:mysql://localhost:3306/todo-list-app-tests?useSSL=false</property>
+        <property name="connection.driver_class">com.mysql.jdbc.Driver</property>
+         <property name="hibernate.connection.username">user</property>
+         <property name="hibernate.connection.password">user</property>
+
+         <property name="hbm2ddl.auto">update</property>
+         <property name="hibernate.dialect">org.hibernate.dialect.MySQL57Dialect</property>
+         <property name="show_sql">true</property>
+
+         <property name="hibernate.c3p0.min_size">5</property>
+         <property name="hibernate.c3p0.max_size">20</property>
+         <property name="hibernate.c3p0.timeout">1800</property>
+         <property name="hibernate.c3p0.max_statements">50</property>
+
+         <mapping class="todolist.entities.TodoList"/>
+         <mapping class="todolist.entities.Task"/>
+         <mapping class="todolist.entities.User"/>
+     </session-factory>
+</hibernate-configuration>

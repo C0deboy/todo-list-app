@@ -13,7 +13,6 @@ public class TodoList {
     private List<Task> tasks = new ArrayList<>();
 
     @Id
-    @GeneratedValue
     @Column(name = "id")
     public int getId() {
         return id;
@@ -52,6 +51,14 @@ public class TodoList {
 
         if (id != todoList.id) return false;
         return name != null ? name.equals(todoList.name) : todoList.name == null;
+    }
+
+    public TodoList() {
+    }
+
+    public TodoList(String name, int ownerID) {
+        this.name = name;
+        this.ownerID = ownerID;
     }
 
     @Override

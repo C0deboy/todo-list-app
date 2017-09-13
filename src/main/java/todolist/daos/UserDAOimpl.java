@@ -40,6 +40,12 @@ public class UserDAOimpl implements UserDAO {
     }
 
     @Override
+    public void removeUser(User user) {
+        Session currentSession = sessionFactory.getCurrentSession();
+        currentSession.delete(user);
+    }
+
+    @Override
     public User getUserByEmail(String email) {
         Session currentSession = sessionFactory.getCurrentSession();
         Query<User> query = currentSession.createQuery("from User where email =:email", User.class);
