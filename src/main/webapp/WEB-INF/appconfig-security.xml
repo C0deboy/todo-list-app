@@ -13,7 +13,7 @@
         <intercept-url pattern="/login"  access="permitAll()"/>
         <intercept-url pattern="/signup"  access="permitAll()"/>
         <intercept-url pattern="/resources/**"  access="permitAll()"/>
-        <intercept-url pattern="/*/your-todo-lists/**"  access="hasAnyAuthority({'USER', 'ADMIN'})"/>
+        <intercept-url pattern="/*/*"  access="hasAnyAuthority({'USER', 'ADMIN'})"/>
         <intercept-url pattern="/**"  access="hasAuthority('ADMIN')"/>
 
         <form-login login-page="/login"

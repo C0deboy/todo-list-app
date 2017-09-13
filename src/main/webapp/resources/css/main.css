@@ -288,7 +288,8 @@ html, body {
   transition: all 0.3s;
 }
 .list-title:hover,
-.user-options a:hover {
+.user-options a:hover,
+.settings-option:hover {
   -webkit-filter: brightness(125%);
   -webkit-transition: all 0.3s;
   -moz-transition: all 0.3s;
@@ -355,5 +356,31 @@ html, body {
   width: auto;
   height: auto;
   display: initial;
+}
+
+  /* User settings page */
+.settings {
+  text-align: center;
+  padding: 100px;
+  width: 35%;
+  margin: auto;
+  font-size: 1em;
+}
+
+.settings-option {
+	background: #1e73bd;
+	border: none;
+	padding: 10px 25px;
+	cursor: pointer;
+	text-decoration: none;
+	color: aliceblue;
+	display: inline-block;
+}
+
+.user-details {
+  font-size: 1.5em;
+  text-align: left;
+  width: 50%;
+  margin: auto;
 }
   
