@@ -22,6 +22,8 @@ public class User {
 
     private String role = "USER";
 
+    private String resetPasswordToken = null;
+
     //private List<TodoList> todoLists = new ArrayList<>();
 
     public User() {
@@ -73,6 +75,16 @@ public class User {
         this.email = email;
     }
 
+    @Basic
+    @Column(name = "resetPasswordToken")
+    public String getResetPasswordToken() {
+        return resetPasswordToken;
+    }
+
+    public void setResetPasswordToken(String resetPasswordToken) {
+        this.resetPasswordToken = resetPasswordToken;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -103,6 +115,7 @@ public class User {
                 ", password='" + password + '\'' +
                 ", email='" + email + '\'' +
                 ", role='" + role + '\'' +
+                ", resetPasswordToken='" + resetPasswordToken + '\'' +
                 '}';
     }
 

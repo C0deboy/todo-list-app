@@ -25,6 +25,14 @@ public class UserDAOimpl implements UserDAO {
     }
 
     @Override
+    public User getUserByResetPasswordToken(String token) {
+        Session currentSession = sessionFactory.getCurrentSession();
+        Query<User> query = currentSession.createQuery("from User  where resetPasswordToken =:token", User.class);
+        query.setParameter("token", token);
+        return query.uniqueResult();
+    }
+
+    @Override
     public User getUser(String username, String password) {
         Session currentSession = sessionFactory.getCurrentSession();
         Query<User> query = currentSession.createQuery("from User  where username =:username and password =:password", User.class);
@@ -51,5 +59,28 @@ public class UserDAOimpl implements UserDAO {
         Query<User> query = currentSession.createQuery("from User where email =:email", User.class);
         query.setParameter("email", email);
         return query.uniqueResult();
+    }
+
+    @Override
+    public void insertResetTokenForEmail(String token, String email) {
+        Session currentSession = sessionFactory.getCurrentSession();
+        Query query = currentSession.createQuery("update User set resetPasswordToken =:token where email =:email");
+        query.setParameter("token", token);
+        query.setParameter("email", email);
+        query.executeUpdate();
+    }
+
+    @Override
+    public SessionFactory getSessionFactory() {
+        return sessionFactory;
+    }
+
+    @Override
+    public void changePassword(int userId, String newPassword) {
+        Session currentSession = sessionFactory.getCurrentSession();
+        Query query = currentSession.createQuery("update User set password =:password where id =:id");
+        query.setParameter("password", newPassword);
+        query.setParameter("id", userId);
+        query.executeUpdate();
     }
 }

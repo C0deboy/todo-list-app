@@ -16,7 +16,7 @@
 
     <title>Todo-list-app</title>
 
-    <link rel="stylesheet" href="${contextPath}/resources/css/main.css" />
+    <link rel="stylesheet" href="<c:url value="/resources/css/main.css" />" />
     <link rel="stylesheet" type="text/css" href="//fonts.googleapis.com/css?family=Ubuntu" />
 
 </head>
@@ -25,26 +25,30 @@
 <a class="app-header" href="/">Todo list app</a>
 
 <div class="login-dialog">
+
     <c:if test="${not empty message}"><span class="message">${message}</span></c:if>
+    <c:if test="${empty message}">
+        <p>Change password</p>
+        <hr>
+        <form:form class="login-form" modelAttribute="user" action="resetPassword" method="post">
+            <form:hidden path="id"/>
+            Username: ${user.username}
+            <br><br>
+            <form:label class="login-fields block" path="password">
+                Enter your new password
+                <form:password class="align-right" path="password"/>
+                <form:errors class="errors" path="password"/>
+            </form:label>
 
-    <form:form class="login-form" modelAttribute="user" action="login" method="post">
-        <form:label class="login-fields" path="username">
-            Username
-            <form:input path="username"/>
-            <form:errors class="errors" path="username"/>
-        </form:label>
-        <form:label class="login-fields" path="password">
-            Password
-            <form:password path="password"/>
-            <form:errors class="errors" path="password"/>
-        </form:label>
-        <label class="remember-me">Remember me
-            <input type="checkbox" name="remember-me"/>
-        </label>
-        <form:button class="login-btn" href="login" >Log in!</form:button>
-    </form:form>
+            <label class="login-fields block">
+                Retype your new password
+                <input type="password" name="retypedPassword"/>
+            </label>
 
-    <a class="signup-btn" href="signup" >Sign up!</a><a class="forgotPassword-btn" href="${contextPath}/forgotPassword" >Forgot password?</a>
+            <br>
+            <form:button class="signup-btn">Change passsword</form:button>
+        </form:form>
+    </c:if>
 </div>
 
 </body>

@@ -22,7 +22,7 @@
 </head>
 <body>
 
-<a class="app-header" href="${contextPath}">Todo list app</a>
+<a class="app-header" href="/">Todo list app</a>
 
 <div class="login-dialog">
     <form:form class="login-form" modelAttribute="user" action="signup" method="post">

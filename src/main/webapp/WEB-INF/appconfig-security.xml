@@ -12,8 +12,11 @@
         <intercept-url pattern="/"  access="permitAll()"/>
         <intercept-url pattern="/login"  access="permitAll()"/>
         <intercept-url pattern="/signup"  access="permitAll()"/>
+        <intercept-url pattern="/forgotPassword"  access="permitAll()"/>
+        <intercept-url pattern="/resetPassword"  access="permitAll()"/>
         <intercept-url pattern="/resources/**"  access="permitAll()"/>
         <intercept-url pattern="/*/*"  access="hasAnyAuthority({'USER', 'ADMIN'})"/>
+        <intercept-url pattern="/*/settings/*"  access="hasAnyAuthority({'USER', 'ADMIN'})"/>
         <intercept-url pattern="/**"  access="hasAuthority('ADMIN')"/>
 
         <form-login login-page="/login"

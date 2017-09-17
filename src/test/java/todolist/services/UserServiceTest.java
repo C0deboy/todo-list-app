@@ -1,5 +1,6 @@
 package todolist.services;
 
+import org.hibernate.Session;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -14,6 +15,8 @@ import org.springframework.transaction.annotation.Transactional;
 import todolist.daos.UserDAO;
 import todolist.entities.User;
 
+import java.util.UUID;
+
 import static org.junit.Assert.*;
 
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -23,11 +26,15 @@ public class UserServiceTest {
     @Autowired
     private UserDAO userDAO;
 
+    private Session currentSession;
+
     private User user;
 
     @Before
     @Transactional
     public void addUser() throws Exception {
+        currentSession = userDAO.getSessionFactory().getCurrentSession();
+
         User testUser = new User("Test", "Test123$", "test@test.com");
 
         userDAO.addUser(testUser);
@@ -69,6 +76,22 @@ public class UserServiceTest {
         User retrievedUser = userDAO.getUserByName(user.getUsername());
 
         assertEquals("Added user is not equal to retrived user", user, retrievedUser);
+    }
+
+    @Test
+    @Transactional
+    public void insertingResetPaswordToken() throws Exception {
+        String token = UUID.randomUUID().toString();
+        String email = user.getEmail();
+
+        userDAO.insertResetTokenForEmail(token, email);
+
+        User retrievedUser = userDAO.getUserByName(user.getUsername());
+
+        currentSession.refresh(retrievedUser);
+
+        assertNotNull("Reset password token is not created", retrievedUser.getResetPasswordToken());
+        assertEquals("Reset password token user is not equal to retrived one", token, retrievedUser.getResetPasswordToken());
     }
 
     @After

@@ -39,7 +39,6 @@ public class TodoListServiceTest {
     @Transactional
     public void setUserAndCurrentSession() throws Exception {
         currentSession = todoListDAO.getSessionFactory().getCurrentSession();
-        //currentSession.setCacheMode(CacheMode.IGNORE);
 
         User testUser = new User("Test", "Test123$", "test@test.com");
 
@@ -86,11 +85,10 @@ public class TodoListServiceTest {
         todoListDAO.toggleDone((byte) 1, taskToBeChanged.getId());
         todoListDAO.changeTaskName(taskToBeChanged.getId(), newTaskName);
 
-        currentSession.flush();
         currentSession.refresh(taskToBeChanged);
+
         todoList = todoListDAO.getTodolistsFor(user).get(0);
 
-        System.out.println("******************");
         Task retrivedTask = todoList.getTasks().get(0);
 
         assertEquals("Retrived task name should be changed", newTaskName, retrivedTask.getTask());
@@ -98,9 +96,8 @@ public class TodoListServiceTest {
 
         todoListDAO.deleteTask(todoList.getTasks().get(0).getId());
 
-        currentSession.flush();
-        currentSession.refresh(todoList);
         todoList = todoListDAO.getTodolistsFor(user).get(0);
+        currentSession.refresh(todoList);
 
         assertTrue("Task should be deleted but is not",todoList.getTasks().size() == 0);
     }
