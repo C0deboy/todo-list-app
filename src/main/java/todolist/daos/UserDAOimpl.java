@@ -4,11 +4,8 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.query.Query;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Repository;
 import todolist.entities.User;
-
-import javax.persistence.NoResultException;
 
 @Repository
 public class UserDAOimpl implements UserDAO {
@@ -76,11 +73,16 @@ public class UserDAOimpl implements UserDAO {
     }
 
     @Override
-    public void changePassword(int userId, String newPassword) {
+    public void changePassword(User user, String newPassword) {
         Session currentSession = sessionFactory.getCurrentSession();
-        Query query = currentSession.createQuery("update User set password =:password where id =:id");
+        Query query = currentSession.createQuery("update User set password =:password where resetPasswordToken =:token");
         query.setParameter("password", newPassword);
-        query.setParameter("id", userId);
+        query.setParameter("token", user.getResetPasswordToken());
         query.executeUpdate();
+
+        Query unsetTokenQuery = currentSession.createQuery("update User set resetPasswordToken =:tokenToUnset where resetPasswordToken =:token");
+        unsetTokenQuery.setParameter("tokenToUnset", null);
+        unsetTokenQuery.setParameter("token", user.getResetPasswordToken());
+        unsetTokenQuery.executeUpdate();
     }
 }

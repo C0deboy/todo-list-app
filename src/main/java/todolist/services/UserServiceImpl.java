@@ -67,6 +67,6 @@ public class UserServiceImpl implements UserService {
     @Override
     @Transactional
     public void changePassword(User user, String password) {
-        userDAO.changePassword(user.getId(), bCryptPasswordEncoder.encode(password));
+        userDAO.changePassword(user, bCryptPasswordEncoder.encode(password));
     }
 }

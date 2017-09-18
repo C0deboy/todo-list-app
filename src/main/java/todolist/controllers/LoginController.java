@@ -1,28 +1,23 @@
 package todolist.controllers;
 
-import org.hibernate.validator.constraints.NotEmpty;
-import org.hibernate.validator.internal.engine.ValidatorImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.validation.*;
-import org.springframework.validation.beanvalidation.CustomValidatorBean;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.MissingServletRequestParameterException;
+import org.springframework.web.bind.annotation.*;
 import todolist.entities.User;
 import todolist.services.EmailService;
 import todolist.services.UserService;
-import todolist.validators.ValidPassword;
 
 import javax.naming.NamingException;
 import javax.servlet.http.HttpServletRequest;
-import javax.validation.Valid;
-import javax.validation.Validator;
+import javax.validation.*;
 import java.util.Locale;
+import java.util.Map;
+import java.util.Set;
 import java.util.UUID;
 
 @Controller
@@ -140,28 +135,53 @@ public class LoginController {
 
     @GetMapping("/resetPassword")
     public String verifyToken(@RequestParam("token") String token, Model model) {
+
         User user = userService.getUserByResetPasswordToken(token);
+
         if (user == null) {
             String invalidLinkMsg = messageSource.getMessage("ResetToken.valid.false", null, Locale.ENGLISH);
             model.addAttribute("message", invalidLinkMsg);
         }
-        User tempUser = new User();
-        tempUser.setUsername(user.getUsername());
-        tempUser.setId(user.getId());
-        model.addAttribute("user", tempUser);
+        else {
+            model.addAttribute("user", user);
+        }
+
         return "resetPassword";
+    }
+
+    @ExceptionHandler(MissingServletRequestParameterException.class)
+    public String handleMissingToken(MissingServletRequestParameterException ex) {
+        return "redirect:forgotPassword";
     }
 
     @PostMapping("/resetPassword")
     public String resetPassword(@ModelAttribute User user, @RequestParam String retypedPassword, BindingResult result, Model model) {
         model.addAttribute("user", user);
 
-        if (!user.getPassword().equals(retypedPassword)) {
+        ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
+        Validator validator = factory.getValidator();
+
+        String property = "password";
+        Set<ConstraintViolation<User>> constraintViolations = validator.validateProperty(user, property);
+
+        if(!constraintViolations.isEmpty()){
+
+            for (ConstraintViolation<User> violation : constraintViolations) {
+
+                String messageCode = violation.getMessageTemplate().replaceAll("[\\{}]", "");
+
+                Map<String, Object> attributes = violation.getConstraintDescriptor().getAttributes();
+                Object[] args = {property, attributes.get("max"), attributes.get("min")};
+
+                result.rejectValue(property, messageCode, args, "");
+            }
+        }
+        else if (!user.getPassword().equals(retypedPassword)) {
             result.rejectValue("password", "ResetPassword.passwordsNotEqual");
-            return "resetPassword";
         }
         else {
             userService.changePassword(user, user.getPassword());
+
             String resetPasswordSuccesMsg = messageSource.getMessage("ResetPassword.success", null, Locale.ENGLISH);
             model.addAttribute("message", resetPasswordSuccesMsg);
         }

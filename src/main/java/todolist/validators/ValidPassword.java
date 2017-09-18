@@ -14,12 +14,12 @@ import java.lang.annotation.Target;
 @Constraint(validatedBy = PasswordValidator.class)
 @Target(ElementType.FIELD)
 @Retention(RetentionPolicy.RUNTIME)
-@NotEmpty
+@NotEmpty(message = "{NotEmpty.user.password}")
 @Length.List({
         @Length(min = 8 , message = "{Length.min.user.password}"),
         @Length(max = 255, message = "{Length.max.user.password}")
 })
-@Pattern(regexp = "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&*_+=])(?=\\S+$).+$")
+@Pattern(regexp = "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&*_+=])(?=\\S+$).+$", message="{Pattern.user.password}")
 public @interface
 ValidPassword {
     String message() default "";

@@ -75,7 +75,10 @@ public class UserServiceTest {
     public void addedUserShouldBeEqualToRetrivedUser() throws Exception {
         User retrievedUser = userDAO.getUserByName(user.getUsername());
 
-        assertEquals("Added user is not equal to retrived user", user, retrievedUser);
+        assertEquals("Added user is not equal to retrived user", user.getUsername(), retrievedUser.getUsername());
+        assertEquals("Added user is not equal to retrived user", user.getPassword(), retrievedUser.getPassword());
+        assertEquals("Added user is not equal to retrived user", user.getEmail(), retrievedUser.getEmail());
+        assertEquals("Added user is not equal to retrived user", user.getRole(), retrievedUser.getRole());
     }
 
     @Test

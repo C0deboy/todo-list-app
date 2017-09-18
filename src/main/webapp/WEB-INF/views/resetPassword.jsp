@@ -31,8 +31,8 @@
         <p>Change password</p>
         <hr>
         <form:form class="login-form" modelAttribute="user" action="resetPassword" method="post">
-            <form:hidden path="id"/>
-            Username: ${user.username}
+            <form:hidden path="resetPasswordToken"/>
+            Username: <form:input path="username" readonly="true"/>
             <br><br>
             <form:label class="login-fields block" path="password">
                 Enter your new password
