@@ -26,13 +26,19 @@
 
 <div class="login-dialog">
 
-    <c:if test="${not empty message}"><span class="message">${message}</span></c:if>
+    <c:if test="${not empty message}">
+        <p>Change password</p>
+        <hr>
+        <br><br>
+        <span class="message">${message}</span>
+    </c:if>
     <c:if test="${empty message}">
         <p>Change password</p>
         <hr>
         <form:form class="login-form" modelAttribute="user" action="resetPassword" method="post">
             <form:hidden path="resetPasswordToken"/>
-            Username: <form:input path="username" readonly="true"/>
+            <form:hidden path="username"/>
+            Username: <input value="${user.username}" disabled/>
             <br><br>
             <form:label class="login-fields block" path="password">
                 Enter your new password
@@ -44,7 +50,6 @@
                 Retype your new password
                 <input type="password" name="retypedPassword"/>
             </label>
-
             <br>
             <form:button class="signup-btn">Change passsword</form:button>
         </form:form>

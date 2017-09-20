@@ -24,4 +24,9 @@
             </list>
         </property>
     </bean>
+
+    <bean id="validatorFactory" class="org.springframework.validation.beanvalidation.LocalValidatorFactoryBean"/>
+
+    <bean id="validator" factory-bean="validatorFactory"
+          factory-method="getValidator" />
 </beans>

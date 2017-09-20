@@ -13,10 +13,10 @@ import java.lang.annotation.Target;
 @Constraint(validatedBy = EmailValidator.class)
 @Target(ElementType.FIELD)
 @Retention(RetentionPolicy.RUNTIME)
-@NotEmpty
-@Email
+@NotEmpty(message = "{NotEmpty.user.email}")
+@Email(message = "{Email.user.email}")
 public @interface ValidEmail {
-    String message() default "";
+    String message() default "{ValidEmail.user.email}";
 
     Class<?>[] groups() default { };
 

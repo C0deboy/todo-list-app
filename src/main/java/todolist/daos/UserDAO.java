@@ -17,4 +17,6 @@ public interface UserDAO {
     User getUserByResetPasswordToken(String token);
 
     void changePassword(User user, String newPassword);
+
+    void changeEmail(String username, String newEmail);
 }

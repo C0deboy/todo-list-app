@@ -85,4 +85,13 @@ public class UserDAOimpl implements UserDAO {
         unsetTokenQuery.setParameter("token", user.getResetPasswordToken());
         unsetTokenQuery.executeUpdate();
     }
+
+    @Override
+    public void changeEmail(String username, String newEmail) {
+        Session currentSession = sessionFactory.getCurrentSession();
+        Query query = currentSession.createQuery("update User set email =:email where username =:username");
+        query.setParameter("email", newEmail);
+        query.setParameter("username", username);
+        query.executeUpdate();
+    }
 }

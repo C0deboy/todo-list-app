@@ -36,19 +36,13 @@ public class UserServiceImpl implements UserService {
     @Override
     @Transactional
     public boolean isUsernameAvailable(String username) {
-        if  (userDAO.getUserByName(username) == null)
-            return true;
-        else
-            return false;
+        return userDAO.getUserByName(username) == null;
     }
 
     @Override
     @Transactional
     public boolean isEmailAvailable(String email) {
-        if  (userDAO.getUserByEmail(email) == null)
-            return true;
-        else
-            return false;
+        return userDAO.getUserByEmail(email) == null;
     }
 
     @Override
@@ -68,5 +62,11 @@ public class UserServiceImpl implements UserService {
     @Transactional
     public void changePassword(User user, String password) {
         userDAO.changePassword(user, bCryptPasswordEncoder.encode(password));
+    }
+
+    @Override
+    @Transactional
+    public void changeEmail(String username, String newEmail) {
+        userDAO.changeEmail(username, newEmail);
     }
 }

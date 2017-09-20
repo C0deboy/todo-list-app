@@ -1,6 +1,7 @@
 package todolist.validators;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 import todolist.services.UserService;
 
 import javax.validation.ConstraintValidator;
@@ -14,11 +15,6 @@ public class UsernameValidator implements ConstraintValidator<ValidUsername, Str
    }
 
    public boolean isValid(String login, ConstraintValidatorContext context) {
-       try {
-           return userService.isUsernameAvailable(login);
-       }
-       catch (NullPointerException e){
-           return true;
-       }
+       return userService.isUsernameAvailable(login);
    }
 }

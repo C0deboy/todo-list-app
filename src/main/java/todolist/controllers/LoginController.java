@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
 import todolist.entities.User;
 import todolist.services.EmailService;
 import todolist.services.UserService;
+import todolist.validators.PropertyValidator;
 
 import javax.naming.NamingException;
 import javax.servlet.http.HttpServletRequest;
@@ -30,6 +31,9 @@ public class LoginController {
 
     @Autowired
     private EmailService emailService;
+
+    @Autowired
+    private PropertyValidator propertyValidator;
 
 
     @GetMapping(value = {"/"})
@@ -104,9 +108,14 @@ public class LoginController {
     @PostMapping("/forgotPassword")
     public String forgotPassword(@ModelAttribute User user, BindingResult result, Model model, HttpServletRequest request) throws NamingException {
         String userEmail = user.getEmail();
+
+        String property = "email";
+
+        if(propertyValidator.isPropertyNotValid(property, user)){
+            result = propertyValidator.addErrorsForBindingResultIfPresent(result);
+        }
         if (userService.isEmailAvailable(userEmail)){
             result.rejectValue("email","ForgotPassword.wrongEmail");
-            return "forgotPassword";
         }
         else {
 
@@ -128,9 +137,9 @@ public class LoginController {
 
             model.addAttribute("user", new User());
             model.addAttribute("message", signupSuccessMsg);
-
-            return "forgotPassword";
         }
+
+        return "forgotPassword";
     }
 
     @GetMapping("/resetPassword")
@@ -150,7 +159,7 @@ public class LoginController {
     }
 
     @ExceptionHandler(MissingServletRequestParameterException.class)
-    public String handleMissingToken(MissingServletRequestParameterException ex) {
+    public String handleMissingToken(MissingServletRequestParameterException e) {
         return "redirect:forgotPassword";
     }
 
@@ -158,23 +167,10 @@ public class LoginController {
     public String resetPassword(@ModelAttribute User user, @RequestParam String retypedPassword, BindingResult result, Model model) {
         model.addAttribute("user", user);
 
-        ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
-        Validator validator = factory.getValidator();
-
         String property = "password";
-        Set<ConstraintViolation<User>> constraintViolations = validator.validateProperty(user, property);
 
-        if(!constraintViolations.isEmpty()){
-
-            for (ConstraintViolation<User> violation : constraintViolations) {
-
-                String messageCode = violation.getMessageTemplate().replaceAll("[\\{}]", "");
-
-                Map<String, Object> attributes = violation.getConstraintDescriptor().getAttributes();
-                Object[] args = {property, attributes.get("max"), attributes.get("min")};
-
-                result.rejectValue(property, messageCode, args, "");
-            }
+        if(propertyValidator.isPropertyNotValid(property, user)){
+            result = propertyValidator.addErrorsForBindingResultIfPresent(result);
         }
         else if (!user.getPassword().equals(retypedPassword)) {
             result.rejectValue("password", "ResetPassword.passwordsNotEqual");
@@ -185,6 +181,7 @@ public class LoginController {
             String resetPasswordSuccesMsg = messageSource.getMessage("ResetPassword.success", null, Locale.ENGLISH);
             model.addAttribute("message", resetPasswordSuccesMsg);
         }
+
         return "resetPassword";
     }
 }

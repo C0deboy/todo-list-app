@@ -274,6 +274,11 @@ html, body {
   color: #1e73bd;
 }
 
+.message.normal-position {
+	position: relative;
+	margin: 0 auto;
+}
+
 .absolute-off {
   position: relative;
 }

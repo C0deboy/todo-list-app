@@ -20,4 +20,6 @@ public interface UserService {
     boolean isEmailAvailable(String email);
 
     void changePassword(User user, String password);
+
+    void changeEmail(String username, String newEmail);
 }
