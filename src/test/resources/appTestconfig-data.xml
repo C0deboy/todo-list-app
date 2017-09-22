@@ -10,7 +10,7 @@
 
     <bean id="sessionFactory" class="org.springframework.orm.hibernate5.LocalSessionFactoryBean">
         <property name="packagesToScan" value="todolist.entities"/>
-        <property name="configLocation" value="classpath:hibernate.cfg.xml"/>
+        <property name="configLocation" value="classpath:hibernate.testcfg.xml"/>
     </bean>
 
     <bean id="transactionManager" class="org.springframework.orm.hibernate5.HibernateTransactionManager">

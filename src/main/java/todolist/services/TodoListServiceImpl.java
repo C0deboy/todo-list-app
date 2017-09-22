@@ -13,8 +13,12 @@ import java.util.ArrayList;
 @Service
 public class TodoListServiceImpl implements TodoListService {
 
+    private final TodoListDAO todoListDAO;
+
     @Autowired
-    private TodoListDAO todoListDAO;
+    public TodoListServiceImpl(TodoListDAO todoListDAO) {
+        this.todoListDAO = todoListDAO;
+    }
 
     @Override
     @Transactional

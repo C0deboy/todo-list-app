@@ -6,23 +6,11 @@
 <!doctype html>
 <html lang="en">
 <head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-
-    <meta name="theme-color" content="#0376a5">
-    <meta name="msapplication-navbutton-color" content="#0376a5">
-    <meta name="apple-mobile-web-app-status-bar-style" content="#0376a5">
-
-    <title>Todo-list-app</title>
-
-    <link rel="stylesheet" href="<c:url value="/resources/css/main.css" />" />
-    <link rel="stylesheet" type="text/css" href="//fonts.googleapis.com/css?family=Ubuntu" />
-
+    <jsp:include page="/WEB-INF/templates/head.jsp"/>
 </head>
 <body>
 
-<a class="app-header" href="/">Todo list app</a>
+<a class="app-header" href="<c:url value="/"/>">Todo list app</a>
 
 <div class="login-dialog">
     <form:form class="login-form" modelAttribute="user" action="signup" method="post">

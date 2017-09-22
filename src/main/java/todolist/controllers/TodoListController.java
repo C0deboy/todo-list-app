@@ -1,9 +1,6 @@
 package todolist.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.access.prepost.PostAuthorize;
-import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -13,27 +10,25 @@ import todolist.entities.User;
 import todolist.services.TodoListService;
 import todolist.services.UserService;
 
-import java.security.Principal;
 import java.util.ArrayList;
 
 @Controller
 public class TodoListController {
 
-    @Autowired
-    private TodoListService todoListService;
+    private final TodoListService todoListService;
+
+    private final UserService userService;
 
     @Autowired
-    private UserService userService;
+    public TodoListController(TodoListService todoListService, UserService userService) {
+        this.todoListService = todoListService;
+        this.userService = userService;
+    }
 
     @GetMapping("/{username}/your-todo-lists")
-    public String getListsForUser(@AuthenticationPrincipal Principal principal, @PathVariable String username, Model model) {
-        String principalName = principal.getName();
+    public String getListsForUser(@PathVariable String username, Model model) {
 
-        if (!principalName.equals(username)) {
-            return "redirect:/"+principalName+"/your-todo-lists";
-        }
-
-        User user = userService.getUserByName(principalName);
+        User user = userService.getUserByName(username);
 
         model.addAttribute(user);
 
@@ -49,26 +44,26 @@ public class TodoListController {
         return "app";
     }
 
-    @PostMapping("/{user}/addList")
-    public String addList(@PathVariable("user") String username, @ModelAttribute("todoList") TodoList todoList) {
+    @PostMapping("/{username}/addList")
+    public String addList(@PathVariable String username, @ModelAttribute("todoList") TodoList todoList) {
         todoListService.addTodoList(todoList);
         return "redirect:/"+ username + "/your-todo-lists";
     }
 
-    @PostMapping(value = "/{user}/manageTodoList", params = "deleteList")
-    public String deleteList(@PathVariable("user") String username, @ModelAttribute("todoList") TodoList todoList) {
+    @PostMapping(value = "/{username}/manageTodoList", params = "deleteList")
+    public String deleteList(@PathVariable String username, @ModelAttribute("todoList") TodoList todoList) {
         todoListService.deleteTodoList(todoList);
         return "redirect:/"+ username + "/your-todo-lists";
     }
 
-    @PostMapping(value = "/{user}/manageTodoList", params = "changeListName")
-    public String changeListName(@PathVariable("user") String username, @ModelAttribute("todoList") TodoList todoList) {
+    @PostMapping(value = "/{username}/manageTodoList", params = "changeListName")
+    public String changeListName(@PathVariable String username, @ModelAttribute("todoList") TodoList todoList) {
         todoListService.changeTodoListName(todoList);
         return "redirect:/"+ username + "/your-todo-lists";
     }
 
-    @PostMapping(value = "/{user}/manageTodoList", params = "addTask")
-    public String addTask(@PathVariable("user") String username, @ModelAttribute("todoList") TodoList todoList, @RequestParam("task") String task) {
+    @PostMapping(value = "/{username}/manageTodoList", params = "addTask")
+    public String addTask(@PathVariable String username, @ModelAttribute("todoList") TodoList todoList, @RequestParam("task") String task) {
         Task newTask = new Task();
         newTask.setTask(task);
         newTask.setListReference(todoList);
@@ -76,8 +71,8 @@ public class TodoListController {
         return "redirect:/"+ username + "/your-todo-lists";
     }
 
-    @PostMapping(value = "/{user}/manageTodoList", params = "changeTaskName")
-    public String changeTaskName(@RequestParam("changeTaskName") int taskIndex, @PathVariable("user") String username, @ModelAttribute("todoList") TodoList todoList) {
+    @PostMapping(value = "/{username}/manageTodoList", params = "changeTaskName")
+    public String changeTaskName(@RequestParam("changeTaskName") int taskIndex, @PathVariable String username, @ModelAttribute("todoList") TodoList todoList) {
         Task task = todoList.getTasks().get(taskIndex);
         int taskID = task.getId();
         String taskText = task.getTask();
@@ -85,15 +80,15 @@ public class TodoListController {
         return "redirect:/"+ username + "/your-todo-lists";
     }
 
-    @PostMapping(value = "/{user}/manageTodoList", params = "deleteTask")
-    public String deleteTask(@RequestParam("deleteTask") int taskID, @PathVariable("user") String username) {
+    @PostMapping(value = "/{username}/manageTodoList", params = "deleteTask")
+    public String deleteTask(@RequestParam("deleteTask") int taskID, @PathVariable String username) {
         todoListService.deleteTask(taskID);
 
         return "redirect:/"+ username + "/your-todo-lists";
     }
 
-    @PostMapping(value = "/{user}/manageTodoList", params = "toggleDone")
-    public String setAsTodo(@RequestParam("toggleDone") int taskIndex, @PathVariable("user") String username, @ModelAttribute("todoList") TodoList todoList) {
+    @PostMapping(value = "/{username}/manageTodoList", params = "toggleDone")
+    public String setAsTodo(@RequestParam("toggleDone") int taskIndex, @PathVariable String username, @ModelAttribute("todoList") TodoList todoList) {
         Task task = todoList.getTasks().get(taskIndex);
         byte done = task.getDone();
         if (done == 1) {

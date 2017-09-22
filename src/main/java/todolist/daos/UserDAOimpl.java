@@ -10,8 +10,12 @@ import todolist.entities.User;
 @Repository
 public class UserDAOimpl implements UserDAO {
 
+    private final SessionFactory sessionFactory;
+
     @Autowired
-    private SessionFactory sessionFactory;
+    public UserDAOimpl(SessionFactory sessionFactory) {
+        this.sessionFactory = sessionFactory;
+    }
 
     @Override
     public User getUserByName(String username) {

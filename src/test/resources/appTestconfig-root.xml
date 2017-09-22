@@ -11,5 +11,8 @@
 
 <import resource="appTestconfig-data.xml"/>
 
+<import resource="appTestconfig-security.xml"/>
+
 <context:component-scan base-package="todolist"/>
+
 </beans>

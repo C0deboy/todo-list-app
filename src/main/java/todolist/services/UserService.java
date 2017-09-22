@@ -1,6 +1,5 @@
 package todolist.services;
 
-import org.springframework.transaction.annotation.Transactional;
 import todolist.entities.User;
 
 public interface UserService {

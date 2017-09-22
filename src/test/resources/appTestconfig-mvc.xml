@@ -25,4 +25,12 @@
         </property>
     </bean>
 
+    <bean id="validatorFactory" class="org.springframework.validation.beanvalidation.LocalValidatorFactoryBean"/>
+
+    <bean id="validator" factory-bean="validatorFactory"
+          factory-method="getValidator" />
+
+    <bean id="emailValidator" class="todolist.validators.EmailValidator"/>
+    <bean id="usernameValidator" class="todolist.validators.UsernameValidator"/>
+
 </beans>

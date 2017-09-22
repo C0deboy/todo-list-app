@@ -15,25 +15,27 @@ import todolist.validators.PropertyValidator;
 
 import javax.naming.NamingException;
 import javax.servlet.http.HttpServletRequest;
-import javax.validation.*;
+import javax.validation.Valid;
 import java.util.Locale;
-import java.util.Map;
-import java.util.Set;
 import java.util.UUID;
 
 @Controller
 public class LoginController {
-    @Autowired
-    private UserService userService;
+    private final UserService userService;
+
+    private final MessageSource messageSource;
+
+    private final EmailService emailService;
+
+    private final PropertyValidator<User> propertyValidator;
 
     @Autowired
-    private MessageSource messageSource;
-
-    @Autowired
-    private EmailService emailService;
-
-    @Autowired
-    private PropertyValidator propertyValidator;
+    public LoginController(UserService userService, MessageSource messageSource, EmailService emailService, PropertyValidator<User> propertyValidator) {
+        this.userService = userService;
+        this.messageSource = messageSource;
+        this.emailService = emailService;
+        this.propertyValidator = propertyValidator;
+    }
 
 
     @GetMapping(value = {"/"})
@@ -115,7 +117,7 @@ public class LoginController {
             result = propertyValidator.addErrorsForBindingResultIfPresent(result);
         }
         if (userService.isEmailAvailable(userEmail)){
-            result.rejectValue("email","ForgotPassword.wrongEmail");
+            result.rejectValue(property,"ForgotPassword.wrongEmail");
         }
         else {
 

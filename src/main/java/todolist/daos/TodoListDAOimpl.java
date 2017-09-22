@@ -14,8 +14,12 @@ import java.util.ArrayList;
 @Repository
 public class TodoListDAOimpl implements TodoListDAO {
 
+    private final SessionFactory sessionFactory;
+
     @Autowired
-    private SessionFactory sessionFactory;
+    public TodoListDAOimpl(SessionFactory sessionFactory) {
+        this.sessionFactory = sessionFactory;
+    }
 
     public SessionFactory getSessionFactory() {
         return sessionFactory;
@@ -26,8 +30,7 @@ public class TodoListDAOimpl implements TodoListDAO {
         Session currentSession = sessionFactory.getCurrentSession();
 		Query<TodoList> theQuery = currentSession.createQuery("from TodoList where ownerID =:ownerID", TodoList.class);
 		theQuery.setParameter("ownerID", user.getId());
-        ArrayList<TodoList> list = (ArrayList<TodoList>) theQuery.getResultList();
-        return list;
+        return (ArrayList<TodoList>) theQuery.getResultList();
 	}
 
 	@Override

@@ -3,29 +3,29 @@ package todolist.validators;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.BindingResult;
-import todolist.entities.User;
 
 import javax.validation.ConstraintViolation;
 import javax.validation.Validator;
-import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
 @Component
-public class PropertyValidator {
+public class PropertyValidator<T> {
+
+    private final Validator validator;
+
+    private String property;
+
+    private Set<ConstraintViolation<T>> constraintViolations;
 
     @Autowired
-    private Validator validator;
+    public PropertyValidator(Validator validator) {
+        this.validator = validator;
+    }
 
-    private User user;
-    private String property = "not set";
-
-    private Set<ConstraintViolation<User>> constraintViolations = new HashSet<>();
-
-    public boolean isPropertyNotValid(String property, User user){
+    public boolean isPropertyNotValid(String property, T t){
         this.property = property;
-        this.user = user;
-        constraintViolations = validator.validateProperty(user, property);
+        constraintViolations = validator.validateProperty(t, property);
 
         return !constraintViolations.isEmpty();
     }
@@ -33,25 +33,18 @@ public class PropertyValidator {
     public BindingResult addErrorsForBindingResultIfPresent(BindingResult result) {
         if(constraintViolations != null){
 
-            for (ConstraintViolation<User> violation : constraintViolations) {
+            for (ConstraintViolation<T> violation : constraintViolations) {
 
-                String messageCode = violation.getMessageTemplate().replaceAll("[\\{}]", "");
+                String messageCode = violation.getMessageTemplate().replaceAll("[{}]", "");
 
                 Map<String, Object> attributes = violation.getConstraintDescriptor().getAttributes();
                 Object[] args = {property, attributes.get("max"), attributes.get("min")};
 
-                result.rejectValue(property, messageCode, args, "");
+                result.rejectValue(property, messageCode, args, violation.getMessage());
 
             }
         }
 
         return result;
     }
-
-    public void printInfoAboutCurrentPropertyValidation() {
-        String objectName = user != null ? user.getClass().getName() : "none";
-        System.out.println("\nObject: " + objectName + "\nProperty: " + property + "\nErrors found: " + constraintViolations.size());
-    }
-
-
 }
