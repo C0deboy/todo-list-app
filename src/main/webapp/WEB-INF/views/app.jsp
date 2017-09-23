@@ -55,7 +55,7 @@
 					</c:forEach>
 				</ul>
 
-				<input name="task" placeholder="Dodaj nowe zadanie"/>
+				<input name="task" placeholder="Add new task"/>
 
 				<button class="add-btn" name="addTask">
 					<i class="fa fa-plus-square fa-lg"></i>
@@ -64,7 +64,7 @@
 		</c:forEach>
 
 		<form:form class="addListForm" modelAttribute="todoList" method="post" action="addList">
-			<form:input path="name" placeholder="Dodaj nową listę"/>
+			<form:input path="name" placeholder="Add new todolist"/>
 			<form:hidden path="ownerID"/>
 			<button class="add-btn">
 				<i class="fa fa-plus-square fa-lg"></i>

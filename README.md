@@ -1,5 +1,5 @@
 # Todo-list-app
-Rewrite using Spring, Hibernate, JSP, JSTL, Servlets, Maven, MySQL and Tomcat
+CRUD app for managing todolists built using Java, Spring, Hibernate, JSP, JSTL, Servlets, Maven, MySQL and Tomcat
 
 Login
 ![alt text](https://github.com/C0deboy/todo-list-app/blob/master/preview1.JPG)
