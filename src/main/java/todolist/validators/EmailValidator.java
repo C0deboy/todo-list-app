@@ -1,9 +1,6 @@
 package todolist.validators;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Configurable;
-import org.springframework.stereotype.Component;
-import org.springframework.web.context.support.SpringBeanAutowiringSupport;
 import todolist.services.UserService;
 
 import javax.validation.ConstraintValidator;

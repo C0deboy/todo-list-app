@@ -18,16 +18,27 @@ public class PropertyValidator<T> {
 
     private Set<ConstraintViolation<T>> constraintViolations;
 
+    private String disabledErrorCode;
+
     @Autowired
     public PropertyValidator(Validator validator) {
         this.validator = validator;
     }
 
-    public boolean isPropertyNotValid(String property, T t){
+    public boolean isPropertyValid(String property, T t){
         this.property = property;
         constraintViolations = validator.validateProperty(t, property);
 
-        return !constraintViolations.isEmpty();
+        if(disabledErrorCode != null){
+            for(ConstraintViolation<T> violation : constraintViolations){
+                if(violation.getMessageTemplate().equals("{"+disabledErrorCode+"}")){
+                    constraintViolations.remove(violation);
+                    break;
+                }
+            }
+        }
+
+        return constraintViolations.isEmpty();
     }
 
     public BindingResult addErrorsForBindingResultIfPresent(BindingResult result) {
@@ -41,10 +52,13 @@ public class PropertyValidator<T> {
                 Object[] args = {property, attributes.get("max"), attributes.get("min")};
 
                 result.rejectValue(property, messageCode, args, violation.getMessage());
-
             }
         }
 
         return result;
+    }
+
+    public void disabledValidationForErrorCode(String errorCode) {
+        this.disabledErrorCode = errorCode;
     }
 }

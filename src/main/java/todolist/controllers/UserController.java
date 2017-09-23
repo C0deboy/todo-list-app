@@ -39,6 +39,7 @@ public class UserController {
 
     @GetMapping("/{username}/settings")
     public String getSettingsPage(Model model, @PathVariable String username) {
+
         User user = userService.getUserByName(username);
 
         model.addAttribute(user);
@@ -61,18 +62,21 @@ public class UserController {
 
     @GetMapping("/{username}/settings/changeEmail")
     public String changeEmail(@PathVariable String username, Model model) {
-        User user = newUser();
-        user.setUsername(username);
+        User user = (User) model.asMap().get("user");
+        if(user.getUsername() == null){
+            user.setUsername(username);
+        }
         model.addAttribute(user);
+
         return "changeEmail";
     }
 
     @PostMapping("/{username}/settings/changeEmail")
-    public String changeEmail(@PathVariable String username, @ModelAttribute User user, BindingResult result, RedirectAttributes redirectAttributes) {
+    public String changeEmail(@PathVariable String username, @ModelAttribute User user, BindingResult result, Model model, RedirectAttributes redirectAttributes) {
 
         String property = "email";
 
-        if(propertyValidator.isPropertyNotValid(property, user)){
+        if(propertyValidator.isPropertyValid(property, user)){
             result = propertyValidator.addErrorsForBindingResultIfPresent(result);
 
             redirectAttributes.addFlashAttribute("org.springframework.validation.BindingResult.user", result);

@@ -3,11 +3,13 @@ package todolist.controllers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.mail.SimpleMailMessage;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import todolist.entities.User;
 import todolist.services.EmailService;
 import todolist.services.UserService;
@@ -16,6 +18,7 @@ import todolist.validators.PropertyValidator;
 import javax.naming.NamingException;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
+import java.security.Principal;
 import java.util.Locale;
 import java.util.UUID;
 
@@ -49,14 +52,16 @@ public class LoginController {
 
 
     @GetMapping("/login")
-    public String login(@ModelAttribute User user,  BindingResult result, String error, String logout, Model model) {
+    public String login(@ModelAttribute User user, @AuthenticationPrincipal Principal principal, BindingResult result, String error, String logout, Model model) {
 
-        if(logout != null) {
+        if(principal != null){
+            return "redirect:/" + principal.getName() + "/your-todo-lists";
+        }
+        else if(logout != null) {
             String logoutMsg = messageSource.getMessage("Logout.success", null, Locale.ENGLISH);
             model.addAttribute("message", logoutMsg);
         }
-
-        if (error != null) {
+        else if (error != null) {
             result.rejectValue("username", "Invalid.credentials");
         }
 
@@ -75,48 +80,55 @@ public class LoginController {
 
     @GetMapping("/signup")
     public String signup(Model model) {
-        User user = new User();
-        model.addAttribute(user);
 
+        if(!model.containsAttribute("user")){
+            User user = new User();
+            model.addAttribute(user);
+        }
         return "signup";
     }
 
 
     @PostMapping("/signup")
-    public String signup(@Valid @ModelAttribute User user, BindingResult result, Model model) {
+    public String signup(@Valid @ModelAttribute User user, BindingResult result, RedirectAttributes redirectAttributes) {
+
+        redirectAttributes.addFlashAttribute("user", user);
 
         if (result.hasErrors()){
-            return "signup";
+            redirectAttributes.addFlashAttribute("org.springframework.validation.BindingResult.user", result);
+            return "redirect:/signup";
         }
         else {
             userService.addUser(user);
             String signupSuccessMsg = messageSource.getMessage("Registration.success", new String[] {user.getUsername()}, Locale.ENGLISH);
 
-            model.addAttribute("user", user);
-            model.addAttribute("message", signupSuccessMsg);
+            redirectAttributes.addFlashAttribute("message", signupSuccessMsg);
 
-            return "login";
+            return "redirect:/login";
         }
     }
 
     @GetMapping("/forgotPassword")
     public String forgotPassword(Model model) {
-        User user = new User();
-        model.addAttribute(user);
+        if(!model.containsAttribute("user")){
+            User user = new User();
+            model.addAttribute(user);
+        }
 
         return "forgotPassword";
     }
 
     @PostMapping("/forgotPassword")
-    public String forgotPassword(@ModelAttribute User user, BindingResult result, Model model, HttpServletRequest request) throws NamingException {
+    public String forgotPassword(@ModelAttribute User user, BindingResult result, RedirectAttributes redirectAttributes, HttpServletRequest request) throws NamingException {
         String userEmail = user.getEmail();
 
         String property = "email";
+        propertyValidator.disabledValidationForErrorCode("ValidEmail.user.email");
 
-        if(propertyValidator.isPropertyNotValid(property, user)){
+        if(!propertyValidator.isPropertyValid(property, user)){
             result = propertyValidator.addErrorsForBindingResultIfPresent(result);
         }
-        if (userService.isEmailAvailable(userEmail)){
+        else if (userService.isEmailAvailable(userEmail)){
             result.rejectValue(property,"ForgotPassword.wrongEmail");
         }
         else {
@@ -126,22 +138,23 @@ public class LoginController {
 
             String appUrl = request.getScheme() + "://" + request.getServerName()+":"+request.getLocalPort();
 
-            SimpleMailMessage passwordResetEmail = new SimpleMailMessage();
-            passwordResetEmail.setFrom("ellucky4@gmail.com");
-            passwordResetEmail.setTo(user.getEmail());
-            passwordResetEmail.setSubject("Password reset request");
-            passwordResetEmail.setText("To reset your password, click the link below:\n" + appUrl
-                    + "/resetPassword?token=" + token);
+
+            String to = user.getEmail();
+            String subject = "Password reset request";
+            String message = "To reset your password, click the link below:\n" + appUrl + "/resetPassword?token=" + token;
+            SimpleMailMessage passwordResetEmail = emailService.prepareMessage(to, subject, message);
 
             emailService.sendSimpleEmail(passwordResetEmail);
 
             String signupSuccessMsg = messageSource.getMessage("ForgotPassword.success", null, Locale.ENGLISH);
 
-            model.addAttribute("user", new User());
-            model.addAttribute("message", signupSuccessMsg);
+            redirectAttributes.addFlashAttribute("message", signupSuccessMsg);
         }
 
-        return "forgotPassword";
+        redirectAttributes.addFlashAttribute("org.springframework.validation.BindingResult.user", result);
+        redirectAttributes.addFlashAttribute("user", user);
+
+        return "redirect:/forgotPassword";
     }
 
     @GetMapping("/resetPassword")
@@ -166,12 +179,11 @@ public class LoginController {
     }
 
     @PostMapping("/resetPassword")
-    public String resetPassword(@ModelAttribute User user, @RequestParam String retypedPassword, BindingResult result, Model model) {
-        model.addAttribute("user", user);
+    public String resetPassword(@ModelAttribute User user, @RequestParam String retypedPassword, BindingResult result, RedirectAttributes redirectAttributes) {
 
         String property = "password";
 
-        if(propertyValidator.isPropertyNotValid(property, user)){
+        if(propertyValidator.isPropertyValid(property, user)){
             result = propertyValidator.addErrorsForBindingResultIfPresent(result);
         }
         else if (!user.getPassword().equals(retypedPassword)) {
@@ -181,9 +193,12 @@ public class LoginController {
             userService.changePassword(user, user.getPassword());
 
             String resetPasswordSuccesMsg = messageSource.getMessage("ResetPassword.success", null, Locale.ENGLISH);
-            model.addAttribute("message", resetPasswordSuccesMsg);
+            redirectAttributes.addFlashAttribute("message", resetPasswordSuccesMsg);
         }
 
-        return "resetPassword";
+        redirectAttributes.addFlashAttribute("org.springframework.validation.BindingResult.user", result);
+        redirectAttributes.addFlashAttribute("user", user);
+
+        return "redirect:/resetPassword?token=" + user.getResetPasswordToken();
     }
 }
