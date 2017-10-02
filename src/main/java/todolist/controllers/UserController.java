@@ -2,6 +2,7 @@ package todolist.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
+import org.springframework.mail.SimpleMailMessage;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -11,10 +12,14 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import todolist.entities.User;
+import todolist.services.EmailService;
 import todolist.services.UserService;
 import todolist.validators.PropertyValidator;
 
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
 import java.util.Locale;
+import java.util.UUID;
 
 @Controller
 public class UserController {
@@ -25,11 +30,14 @@ public class UserController {
 
     private final PropertyValidator<User> propertyValidator;
 
+    private final EmailService emailService;
+
     @Autowired
-    public UserController(UserService userService, MessageSource messageSource, PropertyValidator<User> propertyValidator) {
+    public UserController(UserService userService, MessageSource messageSource, PropertyValidator<User> propertyValidator, EmailService emailService) {
         this.userService = userService;
         this.messageSource = messageSource;
         this.propertyValidator = propertyValidator;
+        this.emailService = emailService;
     }
 
     @ModelAttribute("user")
@@ -43,19 +51,23 @@ public class UserController {
         User user = userService.getUserByName(username);
 
         model.addAttribute(user);
-
         return "settings";
     }
 
     @GetMapping("/{username}/settings/deleteUser")
-    public String deleteUser(@PathVariable String username, RedirectAttributes redirectAttributes) {
+    public String deleteUser(@PathVariable String username, RedirectAttributes redirectAttributes, HttpServletRequest httpServletRequest) {
+        try {
+            httpServletRequest.logout();
+        } catch (ServletException e) {
+            e.printStackTrace();
+        }
+
         User user = userService.getUserByName(username);
         userService.removeUser(user);
 
         String signupSuccessMsg = messageSource.getMessage("UserSettings.deleteUser.success", new String[] {user.getUsername()}, Locale.ENGLISH);
 
         redirectAttributes.addFlashAttribute("message", signupSuccessMsg);
-        redirectAttributes.addFlashAttribute("user", new User());
 
         return "redirect:/login";
     }
@@ -72,11 +84,9 @@ public class UserController {
     }
 
     @PostMapping("/{username}/settings/changeEmail")
-    public String changeEmail(@PathVariable String username, @ModelAttribute User user, BindingResult result, Model model, RedirectAttributes redirectAttributes) {
+    public String changeEmail(@PathVariable String username, @ModelAttribute User user, BindingResult result, RedirectAttributes redirectAttributes) {
 
-        String property = "email";
-
-        if(propertyValidator.isPropertyValid(property, user)){
+        if(!propertyValidator.isPropertyValid("email", user)){
             result = propertyValidator.addErrorsForBindingResultIfPresent(result);
 
             redirectAttributes.addFlashAttribute("org.springframework.validation.BindingResult.user", result);
@@ -85,12 +95,37 @@ public class UserController {
             return "redirect:./changeEmail";
         }
         else {
+
             userService.changeEmail(username, user.getEmail());
 
             String signupSuccessMsg = messageSource.getMessage("UserSettings.changeEmail.success", null, Locale.ENGLISH);
 
             redirectAttributes.addFlashAttribute("message", signupSuccessMsg);
         }
+
+        return "redirect:/" + username + "/settings";
+    }
+
+    @GetMapping("/{username}/settings/changePassword")
+    public String changeEmail(@PathVariable String username, HttpServletRequest request, RedirectAttributes redirectAttributes) {
+
+        User user = userService.getUserByName(username);
+        String token = UUID.randomUUID().toString();
+        userService.insertResetTokenForEmail(token, user.getEmail());
+
+        String domain = request.getScheme() + "://" + request.getServerName()+":"+request.getLocalPort();
+
+
+        String to = user.getEmail();
+        String subject = "Password reset request";
+        String message = "To reset your password, click the link below:\n" + domain + "/resetPassword?token=" + token;
+        SimpleMailMessage passwordResetEmail = emailService.prepareMessage(to, subject, message);
+
+        emailService.sendSimpleEmail(passwordResetEmail);
+
+        String signupSuccessMsg = messageSource.getMessage("ForgotPassword.success", null, Locale.ENGLISH);
+
+        redirectAttributes.addFlashAttribute("message", signupSuccessMsg);
 
         return "redirect:/" + username + "/settings";
     }

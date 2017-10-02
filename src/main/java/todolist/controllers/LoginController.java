@@ -71,7 +71,6 @@ public class LoginController {
     @GetMapping("/accessDenied")
     public String accessDenied(Model model) {
 
-
         String accessDeniedMsg = messageSource.getMessage("Access.denied", null, Locale.ENGLISH);
         model.addAttribute("message", accessDeniedMsg);
 
@@ -92,10 +91,9 @@ public class LoginController {
     @PostMapping("/signup")
     public String signup(@Valid @ModelAttribute User user, BindingResult result, RedirectAttributes redirectAttributes) {
 
-        redirectAttributes.addFlashAttribute("user", user);
-
         if (result.hasErrors()){
             redirectAttributes.addFlashAttribute("org.springframework.validation.BindingResult.user", result);
+            redirectAttributes.addFlashAttribute(user);
             return "redirect:/signup";
         }
         else {
@@ -136,12 +134,12 @@ public class LoginController {
             String token = UUID.randomUUID().toString();
             userService.insertResetTokenForEmail(token, userEmail);
 
-            String appUrl = request.getScheme() + "://" + request.getServerName()+":"+request.getLocalPort();
+            String domain = request.getScheme() + "://" + request.getServerName()+":"+request.getLocalPort();
 
 
             String to = user.getEmail();
             String subject = "Password reset request";
-            String message = "To reset your password, click the link below:\n" + appUrl + "/resetPassword?token=" + token;
+            String message = "To reset your password, click the link below:\n" + domain + "/resetPassword?token=" + token;
             SimpleMailMessage passwordResetEmail = emailService.prepareMessage(to, subject, message);
 
             emailService.sendSimpleEmail(passwordResetEmail);
@@ -152,7 +150,7 @@ public class LoginController {
         }
 
         redirectAttributes.addFlashAttribute("org.springframework.validation.BindingResult.user", result);
-        redirectAttributes.addFlashAttribute("user", user);
+        redirectAttributes.addFlashAttribute(user);
 
         return "redirect:/forgotPassword";
     }
@@ -162,12 +160,16 @@ public class LoginController {
 
         User user = userService.getUserByResetPasswordToken(token);
 
+        System.out.println(user);
+
         if (user == null) {
             String invalidLinkMsg = messageSource.getMessage("ResetToken.valid.false", null, Locale.ENGLISH);
             model.addAttribute("message", invalidLinkMsg);
+            model.addAttribute("user", new User());
         }
-        else {
-            model.addAttribute("user", user);
+
+        if(!model.containsAttribute("user")){
+            model.addAttribute(user);
         }
 
         return "resetPassword";
@@ -183,7 +185,7 @@ public class LoginController {
 
         String property = "password";
 
-        if(propertyValidator.isPropertyValid(property, user)){
+        if(!propertyValidator.isPropertyValid(property, user)){
             result = propertyValidator.addErrorsForBindingResultIfPresent(result);
         }
         else if (!user.getPassword().equals(retypedPassword)) {
@@ -194,10 +196,12 @@ public class LoginController {
 
             String resetPasswordSuccesMsg = messageSource.getMessage("ResetPassword.success", null, Locale.ENGLISH);
             redirectAttributes.addFlashAttribute("message", resetPasswordSuccesMsg);
+
+            return "redirect:/login";
         }
 
         redirectAttributes.addFlashAttribute("org.springframework.validation.BindingResult.user", result);
-        redirectAttributes.addFlashAttribute("user", user);
+        redirectAttributes.addFlashAttribute(user);
 
         return "redirect:/resetPassword?token=" + user.getResetPasswordToken();
     }

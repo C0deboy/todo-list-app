@@ -20,8 +20,7 @@ import java.lang.annotation.Target;
         @Length(max = 255, message = "{Length.max.user.password}")
 })
 @Pattern(regexp = "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&*_+=])(?=\\S+$).+$", message="{Pattern.user.password}")
-public @interface
-ValidPassword {
+public @interface ValidPassword {
     String message() default "";
 
     Class<?>[] groups() default {};

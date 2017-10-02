@@ -18,6 +18,8 @@
          <property name="hibernate.c3p0.timeout">1800</property>
          <property name="hibernate.c3p0.max_statements">50</property>
 
+         <property name="javax.persistence.validation.mode">none</property>
+
          <mapping class="todolist.entities.TodoList"/>
          <mapping class="todolist.entities.Task"/>
          <mapping class="todolist.entities.User"/>

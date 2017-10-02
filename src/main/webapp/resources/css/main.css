@@ -379,7 +379,12 @@ html, body {
 	cursor: pointer;
 	text-decoration: none;
 	color: aliceblue;
-	display: inline-block;
+	display: block;
+	margin-top: 20px;
+}
+
+.settings-option.red {
+	background: #c13e3e;
 }
 
 .user-details {
