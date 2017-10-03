@@ -3,6 +3,7 @@ package todolist.controllers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.mail.SimpleMailMessage;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -52,18 +53,29 @@ public class LoginController {
 
 
     @GetMapping("/login")
-    public String login(@ModelAttribute User user, @AuthenticationPrincipal Principal principal, BindingResult result, String error, String logout, Model model) {
+    public String login(@ModelAttribute User user, @AuthenticationPrincipal Principal principal, BindingResult result, Model model) {
 
         if(principal != null){
             return "redirect:/" + principal.getName() + "/your-todo-lists";
         }
-        else if(logout != null) {
-            String logoutMsg = messageSource.getMessage("Logout.success", null, Locale.ENGLISH);
-            model.addAttribute("message", logoutMsg);
-        }
-        else if (error != null) {
-            result.rejectValue("username", "Invalid.credentials");
-        }
+
+        return "login";
+    }
+
+    @PostMapping("/loginFailure")
+    public String loginFailure(@ModelAttribute User user, BindingResult result) {
+
+        result.rejectValue("username", "Invalid.credentials");
+
+        return "login";
+    }
+
+    @GetMapping("/logoutSuccess")
+    public String logoutSuccess(@ModelAttribute User user, Model model) {
+
+        String logoutMsg = messageSource.getMessage("Logout.success", null, Locale.ENGLISH);
+        model.addAttribute("message", logoutMsg);
+        model.addAttribute(user);
 
         return "login";
     }
@@ -159,8 +171,6 @@ public class LoginController {
     public String verifyToken(@RequestParam("token") String token, Model model) {
 
         User user = userService.getUserByResetPasswordToken(token);
-
-        System.out.println(user);
 
         if (user == null) {
             String invalidLinkMsg = messageSource.getMessage("ResetToken.valid.false", null, Locale.ENGLISH);

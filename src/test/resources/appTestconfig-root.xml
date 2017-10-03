@@ -7,11 +7,11 @@
        http://www.springframework.org/schema/context
        http://www.springframework.org/schema/context/spring-context.xsd">
 
-<import resource="appTestconfig-mvc.xml"/>
+<import resource="appconfig-mvc.xml"/>
 
 <import resource="appTestconfig-data.xml"/>
 
-<import resource="appTestconfig-security.xml"/>
+<import resource="appconfig-security.xml"/>
 
 <context:component-scan base-package="todolist"/>
 
