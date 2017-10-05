@@ -93,9 +93,9 @@ public class LoginController {
     public String signup(Model model) {
 
         if(!model.containsAttribute("user")){
-            User user = new User();
-            model.addAttribute(user);
+            model.addAttribute(new User());
         }
+
         return "signup";
     }
 
@@ -121,8 +121,7 @@ public class LoginController {
     @GetMapping("/forgotPassword")
     public String forgotPassword(Model model) {
         if(!model.containsAttribute("user")){
-            User user = new User();
-            model.addAttribute(user);
+            model.addAttribute(new User());
         }
 
         return "forgotPassword";
