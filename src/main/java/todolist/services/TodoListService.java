@@ -7,19 +7,19 @@ import todolist.entities.User;
 import java.util.ArrayList;
 
 public interface TodoListService {
-    ArrayList<TodoList> getTodolistsFor(User user);
+  ArrayList<TodoList> getTodolistsFor(User user);
 
-    void addTask(Task task);
+  void addTask(Task task);
 
-    void addTodoList(TodoList todoList);
+  void addTodoList(TodoList todoList);
 
-    void deleteTodoList(TodoList todoList);
+  void deleteTodoList(TodoList todoList);
 
-    void changeTodoListName(TodoList todoList);
+  void changeTodoListName(TodoList todoList);
 
-    void deleteTask(int taskID);
+  void deleteTask(int taskID);
 
-    void changeTaskName(int taskID, String task);
+  void changeTaskName(int taskID, String task);
 
-    void toggleDone(byte done, int taskID);
+  void toggleDone(byte done, int taskID);
 }

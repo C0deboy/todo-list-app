@@ -9,17 +9,18 @@
 		http://www.springframework.org/schema/security/spring-security.xsd">
 
     <http auto-config="true">
-        <intercept-url pattern="/"  access="permitAll()"/>
-        <intercept-url pattern="/login"  access="permitAll()"/>
-        <intercept-url pattern="/signup"  access="permitAll()"/>
-        <intercept-url pattern="/forgotPassword"  access="permitAll()"/>
-        <intercept-url pattern="/resetPassword"  access="permitAll()"/>
-        <intercept-url pattern="/logoutSuccess"  access="permitAll()"/>
-        <intercept-url pattern="/loginFailure"  access="permitAll()"/>
-        <intercept-url pattern="/accessDenied"  access="permitAll()"/>
-        <intercept-url pattern="/resources/**"  access="permitAll()"/>
-        <intercept-url pattern="/{username}/**"  access="hasAnyAuthority({'USER', 'ADMIN'}) and #username == principal.username"/>
-        <intercept-url pattern="/**"  access="hasAuthority('ADMIN')"/>
+        <intercept-url pattern="/" access="permitAll()"/>
+        <intercept-url pattern="/login" access="permitAll()"/>
+        <intercept-url pattern="/signup" access="permitAll()"/>
+        <intercept-url pattern="/forgotPassword" access="permitAll()"/>
+        <intercept-url pattern="/resetPassword" access="permitAll()"/>
+        <intercept-url pattern="/logoutSuccess" access="permitAll()"/>
+        <intercept-url pattern="/loginFailure" access="permitAll()"/>
+        <intercept-url pattern="/accessDenied" access="permitAll()"/>
+        <intercept-url pattern="/resources/**" access="permitAll()"/>
+        <intercept-url pattern="/{username}/**"
+                       access="hasAnyAuthority({'USER', 'ADMIN'}) and #username == principal.username"/>
+        <intercept-url pattern="/**" access="hasAuthority('ADMIN')"/>
 
         <form-login login-page="/login"
                     login-processing-url="/login"
@@ -33,10 +34,10 @@
 
         <access-denied-handler error-page="/accessDenied"/>
 
-        <csrf disabled="true" />
+        <csrf disabled="true"/>
     </http>
 
-    <beans:bean id="authenticationSuccessHandler" class="todolist.security.AuthenticationSuccessHandlerImpl" />
+    <beans:bean id="authenticationSuccessHandler" class="todolist.security.AuthenticationSuccessHandlerImpl"/>
 
     <authentication-manager alias="authenticationManager">
         <authentication-provider user-service-ref="userDetailsService">

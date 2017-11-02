@@ -25,235 +25,242 @@ import todolist.services.EmailService;
 import todolist.services.UserService;
 import todolist.validators.PropertyValidator;
 
-import javax.validation.Validator;
 import java.util.Locale;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.any;
+import static org.mockito.Mockito.anyString;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
 import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.flash;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.forwardedUrl;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.redirectedUrl;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = "classpath:/appTestconfig-root.xml")
 @WebAppConfiguration
 public class LoginControllerTest {
 
-    private MockMvc mockMvc;
+  private MockMvc mockMvc;
 
-    @Autowired
-    private FilterChainProxy filterChainProxy;
+  @Autowired
+  private FilterChainProxy filterChainProxy;
 
-    @Mock
-    private UserService userService;
+  @Mock
+  private UserService userService;
 
-    @Mock
-    private MessageSource messageSource;
+  @Mock
+  private MessageSource messageSource;
 
-    @Mock
-    private EmailService emailService;
+  @Mock
+  private EmailService emailService;
 
-    @Spy
-    @Autowired
-    private PropertyValidator<User> propertyValidator;
+  @Spy
+  @Autowired
+  private PropertyValidator<User> propertyValidator;
 
-    @InjectMocks
-    private LoginController loginController;
+  @InjectMocks
+  private LoginController loginController;
 
-    public LoginControllerTest() {
-    }
+  public LoginControllerTest() {
+  }
 
-    @Before
-    public void init(){
-        MockitoAnnotations.initMocks(this);
+  @Before
+  public void init() {
+    MockitoAnnotations.initMocks(this);
 
-        when(messageSource.getMessage(any(), any(), any())).thenReturn("mockedMessage");
+    when(messageSource.getMessage(any(), any(), any())).thenReturn("mockedMessage");
 
-        InternalResourceViewResolver viewResolver = new InternalResourceViewResolver();
-        viewResolver.setPrefix("/WEB-INF/jsp/view/");
-        viewResolver.setSuffix(".jsp");
+    InternalResourceViewResolver viewResolver = new InternalResourceViewResolver();
+    viewResolver.setPrefix("/WEB-INF/jsp/view/");
+    viewResolver.setSuffix(".jsp");
 
-        mockMvc = MockMvcBuilders.standaloneSetup(loginController)
-                .apply(springSecurity(filterChainProxy))
-                .setViewResolvers(viewResolver)
-                .build();
-    }
+    mockMvc = MockMvcBuilders.standaloneSetup(loginController)
+        .apply(springSecurity(filterChainProxy))
+        .setViewResolvers(viewResolver)
+        .build();
+  }
 
-    @Test
-    public void redirectToLoginPage() throws Exception {
+  @Test
+  public void redirectToLoginPage() throws Exception {
 
-        mockMvc.perform(get("/"))
-                .andExpect(status().isFound())
-                .andExpect(redirectedUrl("/login"))
-                .andExpect(model().attribute("user", new User()));
-    }
+    mockMvc.perform(get("/"))
+        .andExpect(status().isFound())
+        .andExpect(redirectedUrl("/login"))
+        .andExpect(model().attribute("user", new User()));
+  }
 
-    @Test
-    public void accessToTypedUrlShouldBeForbbidenForWrongUser() throws Exception {
+  @Test
+  public void accessToTypedUrlShouldBeForbbidenForWrongUser() throws Exception {
 
-        mockMvc.perform(get("/Codeboy/your-todo-lists")
-                        .with(user("user").password("user")))
-                .andExpect(forwardedUrl("/accessDenied"));
-    }
+    mockMvc.perform(get("/Codeboy/your-todo-lists")
+        .with(user("user").password("user")))
+        .andExpect(forwardedUrl("/accessDenied"));
+  }
 
-    @Test
-    public void accessDeniedPageShouldContainMessage() throws Exception {
+  @Test
+  public void accessDeniedPageShouldContainMessage() throws Exception {
 
-        mockMvc.perform(get("/accessDenied"))
-                .andExpect(status().isOk())
-                .andExpect(view().name("access-denied"))
-                .andExpect(model().attributeExists("message"));
+    mockMvc.perform(get("/accessDenied"))
+        .andExpect(status().isOk())
+        .andExpect(view().name("access-denied"))
+        .andExpect(model().attributeExists("message"));
 
-        verify(messageSource, times(1)).getMessage("Access.denied", null, Locale.ENGLISH);
-    }
+    verify(messageSource, times(1)).getMessage("Access.denied", null, Locale.ENGLISH);
+  }
 
-    @Test
-    @WithMockUser(username = "Codeboy", authorities = "USER")
-    public void shouldRedirectToMainPageWhenUserLoggedIn() throws Exception {
+  @Test
+  @WithMockUser(username = "Codeboy", authorities = "USER")
+  public void shouldRedirectToMainPageWhenUserLoggedIn() throws Exception {
 
-        mockMvc.perform(get("/login"))
-                .andExpect(status().isFound())
-                .andExpect(redirectedUrl("/Codeboy/your-todo-lists"));
-    }
+    mockMvc.perform(get("/login"))
+        .andExpect(status().isFound())
+        .andExpect(redirectedUrl("/Codeboy/your-todo-lists"));
+  }
 
-    @Test
-    public void shouldLogoutUserAtSpecificUrl() throws Exception {
+  @Test
+  public void shouldLogoutUserAtSpecificUrl() throws Exception {
 
-        mockMvc.perform(get("/logout"))
-                .andExpect(status().isFound())
-                .andExpect(redirectedUrl("/logoutSuccess"));
-    }
+    mockMvc.perform(get("/logout"))
+        .andExpect(status().isFound())
+        .andExpect(redirectedUrl("/logoutSuccess"));
+  }
 
-    @Test
-    public void logoutPageShouldContainMessage() throws Exception {
-        mockMvc.perform(get("/logoutSuccess"))
-                .andExpect(status().isOk())
-                .andExpect(view().name("login"))
-                .andExpect(model().attributeExists("message", "user"));
+  @Test
+  public void logoutPageShouldContainMessage() throws Exception {
+    mockMvc.perform(get("/logoutSuccess"))
+        .andExpect(status().isOk())
+        .andExpect(view().name("login"))
+        .andExpect(model().attributeExists("message", "user"));
 
-        verify(messageSource).getMessage("Logout.success", null, Locale.ENGLISH);
-    }
+    verify(messageSource).getMessage("Logout.success", null, Locale.ENGLISH);
+  }
 
-    @Test
-    @WithMockUser(username = "user", password = "user")
-    public void attemptToLoginWithInvalidCredentialsRusultsLoginFailure() throws Exception {
-        mockMvc.perform(post("/login"))
-                .andExpect(status().isOk())
-                .andExpect(forwardedUrl("/loginFailure"));
-    }
+  @Test
+  @WithMockUser(username = "user", password = "user")
+  public void attemptToLoginWithInvalidCredentialsRusultsLoginFailure() throws Exception {
+    mockMvc.perform(post("/login"))
+        .andExpect(status().isOk())
+        .andExpect(forwardedUrl("/loginFailure"));
+  }
 
-    @Test
-    public void atFailedLoginUserGetsMessage() throws Exception {
-        mockMvc.perform(post("/loginFailure"))
-                .andExpect(status().isOk())
-                .andExpect(view().name("login"))
-                .andExpect(model().attributeHasFieldErrorCode(
-                        "user",
-                        "username",
-                        "Invalid.credentials"));
-    }
+  @Test
+  public void atFailedLoginUserGetsMessage() throws Exception {
+    mockMvc.perform(post("/loginFailure"))
+        .andExpect(status().isOk())
+        .andExpect(view().name("login"))
+        .andExpect(model().attributeHasFieldErrorCode(
+            "user",
+            "username",
+            "Invalid.credentials"));
+  }
 
-    @Test
-    public void userExistsInModelAtSignup() throws Exception {
-        mockMvc.perform(get("/signup"))
-                .andExpect(status().isOk())
-                .andExpect(view().name("signup"))
-                .andExpect(model().attributeExists("user"));
-    }
+  @Test
+  public void userExistsInModelAtSignup() throws Exception {
+    mockMvc.perform(get("/signup"))
+        .andExpect(status().isOk())
+        .andExpect(view().name("signup"))
+        .andExpect(model().attributeExists("user"));
+  }
 
-    @Test
-    public void signupFailsAndThrowsErrorsWhenInvalidUserData() throws Exception {
+  @Test
+  public void signupFailsAndThrowsErrorsWhenInvalidUserData() throws Exception {
 
-        User user = new User("ts", "less8", "em.pl");
-        String userBindingResult = "org.springframework.validation.BindingResult.user";
+    User user = new User("ts", "less8", "em.pl");
+    String userBindingResult = "org.springframework.validation.BindingResult.user";
 
-        FlashMap flashMap = mockMvc.perform(post("/signup").flashAttr("user", user))
-                .andExpect(status().isFound())
-                .andExpect(redirectedUrl("/signup"))
-                .andExpect(flash().attributeExists(userBindingResult, "user"))
-                .andReturn().getFlashMap();
+    FlashMap flashMap = mockMvc.perform(post("/signup").flashAttr("user", user))
+        .andExpect(status().isFound())
+        .andExpect(redirectedUrl("/signup"))
+        .andExpect(flash().attributeExists(userBindingResult, "user"))
+        .andReturn().getFlashMap();
 
 
-        BindingResult result = (BindingResult) flashMap.get(userBindingResult);
+    BindingResult result = (BindingResult) flashMap.get(userBindingResult);
 
-        assertEquals("Should be 4 errors", 4, result.getErrorCount());
-    }
+    assertEquals("Should be 4 errors", 4, result.getErrorCount());
+  }
 
-    @Test
-    public void signupSucceedWhenValidUserData() throws Exception {
-        User user = new User("Test", "Test$123", "test@gmail.com");
+  @Test
+  public void signupSucceedWhenValidUserData() throws Exception {
+    User user = new User("Test", "Test$123", "test@gmail.com");
 
-        String userBindingResult = "org.springframework.validation.BindingResult.user";
+    String userBindingResult = "org.springframework.validation.BindingResult.user";
 
-        FlashMap flashMap = mockMvc.perform(post("/signup").flashAttr("user", user))
-                .andExpect(status().isFound())
-                .andExpect(redirectedUrl("/login"))
-                .andExpect(flash().attributeExists("message"))
-                .andReturn().getFlashMap();
+    FlashMap flashMap = mockMvc.perform(post("/signup").flashAttr("user", user))
+        .andExpect(status().isFound())
+        .andExpect(redirectedUrl("/login"))
+        .andExpect(flash().attributeExists("message"))
+        .andReturn().getFlashMap();
 
-        BindingResult result = (BindingResult) flashMap.get(userBindingResult);
+    BindingResult result = (BindingResult) flashMap.get(userBindingResult);
 
-        assertNull("Should be 0 errors", result);
+    assertNull("Should be 0 errors", result);
 
-        verify(messageSource, times(1)).getMessage("Registration.success", new String[] {user.getUsername()}, Locale.ENGLISH);
-    }
+    verify(messageSource, times(1)).getMessage("Registration.success",
+        new String[] {user.getUsername()}, Locale.ENGLISH);
+  }
 
-    @Test
-    public void forgotPasswordContainsUserModel() throws Exception {
-        mockMvc.perform(get("/forgotPassword"))
-                .andExpect(status().isOk())
-                .andExpect(view().name("forgotPassword"))
-                .andExpect(model().attributeExists("user"));
-    }
+  @Test
+  public void forgotPasswordContainsUserModel() throws Exception {
+    mockMvc.perform(get("/forgotPassword"))
+        .andExpect(status().isOk())
+        .andExpect(view().name("forgotPassword"))
+        .andExpect(model().attributeExists("user"));
+  }
 
-    @Test
-    public void whenUserTypesInvalidEmailInForgotPasswordThenGetsMessage() throws Exception {
+  @Test
+  public void whenUserTypesInvalidEmailInForgotPasswordThenGetsMessage() throws Exception {
 
-        User user = new User("", "", "wrong.pl");
-        String userBindingResult = "org.springframework.validation.BindingResult.user";
+    User user = new User("", "", "wrong.pl");
+    String userBindingResult = "org.springframework.validation.BindingResult.user";
 
-        FlashMap flashMap = mockMvc.perform(post("/forgotPassword").flashAttr("user", user))
-                .andExpect(status().isFound())
-                .andExpect(flash().attributeExists(userBindingResult, "user"))
-                .andExpect(redirectedUrl("/forgotPassword"))
-                .andReturn().getFlashMap();
+    FlashMap flashMap = mockMvc.perform(post("/forgotPassword").flashAttr("user", user))
+        .andExpect(status().isFound())
+        .andExpect(flash().attributeExists(userBindingResult, "user"))
+        .andExpect(redirectedUrl("/forgotPassword"))
+        .andReturn().getFlashMap();
 
-        BindingResult result = (BindingResult) flashMap.get(userBindingResult);
+    BindingResult result = (BindingResult) flashMap.get(userBindingResult);
 
-        assertEquals(1, result.getErrorCount());
+    assertEquals(1, result.getErrorCount());
 
-        verify(propertyValidator).disabledValidationForErrorCode("ValidEmail.user.email");
-        verify(propertyValidator).isPropertyValid("email", user);
-        verify(propertyValidator).addErrorsForBindingResultIfPresent(any(BindingResult.class));
-    }
+    verify(propertyValidator).disabledValidationForErrorCode("ValidEmail.user.email");
+    verify(propertyValidator).isPropertyValid("email", user);
+    verify(propertyValidator).addErrorsForBindingResultIfPresent(any(BindingResult.class));
+  }
 
-    @Test
-    public void whenUserTypesValidEmailInForgotPasswordThenThenGetsMessageAndLinkIsSent() throws Exception {
-        when(emailService.prepareMessage(anyString(), anyString(), anyString())).thenReturn(new SimpleMailMessage());
+  @Test
+  public void whenUserTypesValidEmailInForgotPasswordThenThenGetsMessageAndLinkIsSent() throws Exception {
+    when(emailService.prepareMessage(anyString(), anyString(), anyString())).thenReturn(new SimpleMailMessage());
 
-        User user = new User("", "", "root@gmail.com");
-        String userBindingResult = "org.springframework.validation.BindingResult.user";
+    User user = new User("", "", "root@gmail.com");
+    String userBindingResult = "org.springframework.validation.BindingResult.user";
 
-        FlashMap flashMap = mockMvc.perform(post("/forgotPassword").flashAttr("user", user))
-                .andExpect(status().isFound())
-                .andExpect(flash().attributeExists("message", "user"))
-                .andExpect(redirectedUrl("/forgotPassword"))
-                .andReturn().getFlashMap();
+    FlashMap flashMap = mockMvc.perform(post("/forgotPassword").flashAttr("user", user))
+        .andExpect(status().isFound())
+        .andExpect(flash().attributeExists("message", "user"))
+        .andExpect(redirectedUrl("/forgotPassword"))
+        .andReturn().getFlashMap();
 
-        BindingResult result = (BindingResult) flashMap.get(userBindingResult);
+    BindingResult result = (BindingResult) flashMap.get(userBindingResult);
 
-        assertTrue("Should be no errors", result.getErrorCount() == 0);
+    assertTrue("Should be no errors", result.getErrorCount() == 0);
 
-        verify(userService).insertResetTokenForEmail(anyString(), anyString());
-        verify(emailService).prepareMessage(anyString(), anyString(), anyString());
-        verify(emailService).sendSimpleEmail(any(SimpleMailMessage.class));
-        verify(messageSource).getMessage("ForgotPassword.success", null, Locale.ENGLISH);
+    verify(userService).insertResetTokenForEmail(anyString(), anyString());
+    verify(emailService).prepareMessage(anyString(), anyString(), anyString());
+    verify(emailService).sendSimpleEmail(any(SimpleMailMessage.class));
+    verify(messageSource).getMessage("ForgotPassword.success", null, Locale.ENGLISH);
 
-    }
+  }
 }

@@ -16,14 +16,15 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 @NotEmpty(message = "{NotEmpty.user.password}")
 @Length.List({
-        @Length(min = 8 , message = "{Length.min.user.password}"),
-        @Length(max = 255, message = "{Length.max.user.password}")
+    @Length(min = 8, message = "{Length.min.user.password}"),
+    @Length(max = 255, message = "{Length.max.user.password}")
 })
-@Pattern(regexp = "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&*_+=])(?=\\S+$).+$", message="{Pattern.user.password}")
+@Pattern(regexp = "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&*_+=])(?=\\S+$).+$",
+    message = "{Pattern.user.password}")
 public @interface ValidPassword {
-    String message() default "";
+  String message() default "";
 
-    Class<?>[] groups() default {};
+  Class<?>[] groups() default {};
 
-    Class<? extends Payload>[] payload() default { };
+  Class<? extends Payload>[] payload() default {};
 }

@@ -16,9 +16,9 @@ import java.lang.annotation.Target;
 @NotEmpty(message = "{NotEmpty.user.email}")
 @Email(message = "{Email.user.email}")
 public @interface ValidEmail {
-    String message() default "{ValidEmail.user.email}";
+  String message() default "{ValidEmail.user.email}";
 
-    Class<?>[] groups() default { };
+  Class<?>[] groups() default {};
 
-    Class<? extends Payload>[] payload() default { };
+  Class<? extends Payload>[] payload() default {};
 }

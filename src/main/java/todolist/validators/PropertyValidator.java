@@ -12,53 +12,53 @@ import java.util.Set;
 @Component
 public class PropertyValidator<T> {
 
-    private final Validator validator;
+  private final Validator validator;
 
-    private String property;
+  private String property;
 
-    private Set<ConstraintViolation<T>> constraintViolations;
+  private Set<ConstraintViolation<T>> constraintViolations;
 
-    private String disabledErrorCode;
+  private String disabledErrorCode;
 
-    @Autowired
-    public PropertyValidator(Validator validator) {
-        this.validator = validator;
-    }
+  @Autowired
+  public PropertyValidator(Validator validator) {
+    this.validator = validator;
+  }
 
-    public boolean isPropertyValid(String property, T t){
-        this.property = property;
-        constraintViolations = validator.validateProperty(t, property);
+  public boolean isPropertyValid(String property, T t) {
+    this.property = property;
+    constraintViolations = validator.validateProperty(t, property);
 
-        if(disabledErrorCode != null){
-            for(ConstraintViolation<T> violation : constraintViolations){
-                if(violation.getMessageTemplate().equals("{"+disabledErrorCode+"}")){
-                    constraintViolations.remove(violation);
-                    break;
-                }
-            }
+    if (disabledErrorCode != null) {
+      for (ConstraintViolation<T> violation : constraintViolations) {
+        if (violation.getMessageTemplate().equals("{" + disabledErrorCode + "}")) {
+          constraintViolations.remove(violation);
+          break;
         }
-
-        return constraintViolations.isEmpty();
+      }
     }
 
-    public BindingResult addErrorsForBindingResultIfPresent(BindingResult result) {
-        if(constraintViolations != null){
+    return constraintViolations.isEmpty();
+  }
 
-            for (ConstraintViolation<T> violation : constraintViolations) {
+  public BindingResult addErrorsForBindingResultIfPresent(BindingResult result) {
+    if (constraintViolations != null) {
 
-                String messageCode = violation.getMessageTemplate().replaceAll("[{}]", "");
+      for (ConstraintViolation<T> violation : constraintViolations) {
 
-                Map<String, Object> attributes = violation.getConstraintDescriptor().getAttributes();
-                Object[] args = {property, attributes.get("max"), attributes.get("min")};
+        String messageCode = violation.getMessageTemplate().replaceAll("[{}]", "");
 
-                result.rejectValue(property, messageCode, args, violation.getMessage());
-            }
-        }
+        Map<String, Object> attributes = violation.getConstraintDescriptor().getAttributes();
+        Object[] args = {property, attributes.get("max"), attributes.get("min")};
 
-        return result;
+        result.rejectValue(property, messageCode, args, violation.getMessage());
+      }
     }
 
-    public void disabledValidationForErrorCode(String errorCode) {
-        this.disabledErrorCode = errorCode;
-    }
+    return result;
+  }
+
+  public void disabledValidationForErrorCode(String errorCode) {
+    this.disabledErrorCode = errorCode;
+  }
 }

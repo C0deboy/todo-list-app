@@ -3,22 +3,22 @@ package todolist.services;
 import todolist.entities.User;
 
 public interface UserService {
-    
-    User getUserByName(String username);
 
-    User getUserByResetPasswordToken(String token);
+  User getUserByName(String username);
 
-    void insertResetTokenForEmail(String token, String email);
+  User getUserByResetPasswordToken(String token);
 
-    boolean isUsernameAvailable(String username);
+  void insertResetTokenForEmail(String token, String email);
 
-    void addUser(User user);
+  boolean isUsernameAvailable(String username);
 
-    void removeUser(User user);
+  void addUser(User user);
 
-    boolean isEmailAvailable(String email);
+  void removeUser(User user);
 
-    void changePassword(User user, String password);
+  boolean isEmailAvailable(String email);
 
-    void changeEmail(String username, String newEmail);
+  void changePassword(User user, String password);
+
+  void changeEmail(String username, String newEmail);
 }

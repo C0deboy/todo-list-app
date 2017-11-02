@@ -4,19 +4,23 @@ import org.hibernate.SessionFactory;
 import todolist.entities.User;
 
 public interface UserDAO {
-    User getUserByName(String username);
-    User getUser(String username, String password);
-    User getUserByEmail(String email);
-    void addUser(User user);
-    void removeUser(User user);
+  User getUserByName(String username);
 
-    void insertResetTokenForEmail(String token, String email);
+  User getUser(String username, String password);
 
-    SessionFactory getSessionFactory();
+  User getUserByEmail(String email);
 
-    User getUserByResetPasswordToken(String token);
+  void addUser(User user);
 
-    void changePassword(User user, String newPassword);
+  void removeUser(User user);
 
-    void changeEmail(String username, String newEmail);
+  void insertResetTokenForEmail(String token, String email);
+
+  SessionFactory getSessionFactory();
+
+  User getUserByResetPasswordToken(String token);
+
+  void changePassword(User user, String newPassword);
+
+  void changeEmail(String username, String newEmail);
 }

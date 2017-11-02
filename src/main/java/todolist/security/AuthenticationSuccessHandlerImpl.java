@@ -10,10 +10,12 @@ import java.io.IOException;
 
 public class AuthenticationSuccessHandlerImpl implements AuthenticationSuccessHandler {
 
-    @Override
-    public void onAuthenticationSuccess(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, Authentication authentication) throws IOException, ServletException {
-        String contextPath = httpServletRequest.getContextPath();
+  @Override
+  public void onAuthenticationSuccess(HttpServletRequest httpServletRequest,
+                                      HttpServletResponse httpServletResponse,
+                                      Authentication auth) throws IOException, ServletException {
+    String contextPath = httpServletRequest.getContextPath();
 
-        httpServletResponse.sendRedirect(contextPath + "/" + authentication.getName() + "/your-todo-lists");
-    }
+    httpServletResponse.sendRedirect(contextPath + "/" + auth.getName() + "/your-todo-lists");
+  }
 }

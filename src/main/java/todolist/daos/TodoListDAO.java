@@ -7,23 +7,24 @@ import todolist.entities.User;
 
 import java.util.ArrayList;
 
+
 public interface TodoListDAO {
 
-    SessionFactory getSessionFactory();
+  SessionFactory getSessionFactory();
 
-    ArrayList<TodoList> getTodolistsFor(User owner);
+  ArrayList<TodoList> getTodolistsFor(User owner);
 
-    void addTask(Task task);
+  void addTask(Task task);
 
-    void changeTaskName(int taskID, String task);
+  void changeTaskName(int taskId, String task);
 
-    void addTodoList(TodoList todoList);
+  void addTodoList(TodoList todoList);
 
-    void deleteTodoList(TodoList todoList);
+  void deleteTodoList(TodoList todoList);
 
-    void changeListName(TodoList todoList);
+  void changeListName(TodoList todoList);
 
-    void deleteTask(int taskID);
+  void deleteTask(int taskId);
 
-    void toggleDone(byte done, int taskID);
+  void toggleDone(byte done, int taskId);
 }

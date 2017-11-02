@@ -8,18 +8,17 @@ import javax.validation.ConstraintValidatorContext;
 
 public class EmailValidator implements ConstraintValidator<ValidEmail, String> {
 
-    @Autowired
-    private UserService userService;
+  @Autowired
+  private UserService userService;
 
-    public void initialize(ValidEmail constraint) {
-    }
+  public void initialize(ValidEmail constraint) {
+  }
 
-    public boolean isValid(String email, ConstraintValidatorContext context) {
-        try {
-            return userService.isEmailAvailable(email);
-        }
-        catch (NullPointerException e){
-            return true;
-        }
+  public boolean isValid(String email, ConstraintValidatorContext context) {
+    try {
+      return userService.isEmailAvailable(email);
+    } catch (NullPointerException e) {
+      return true;
     }
+  }
 }

@@ -5,29 +5,33 @@ import org.springframework.core.io.Resource;
 
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
 
 public class PasswordValidator implements ConstraintValidator<ValidPassword, String> {
-    public void initialize(ValidPassword constraint) {
-    }
+  public void initialize(ValidPassword constraint) {
+  }
 
-    public boolean isValid(String password, ConstraintValidatorContext context) {
-        Resource resource = new ClassPathResource("100-common-passwords.txt");
+  public boolean isValid(String password, ConstraintValidatorContext context) {
+    Resource resource = new ClassPathResource("100-common-passwords.txt");
 
-        try (BufferedReader commonPasswords = new BufferedReader(new InputStreamReader(resource.getInputStream())) ) {
-            String commonPassword;
+    try (BufferedReader commonPasswords = new BufferedReader(
+        new InputStreamReader(resource.getInputStream()))) {
 
-            while ((commonPassword = commonPasswords.readLine()) != null) {
-                if (password.toLowerCase().contains(commonPassword)) {
-                    return false;
-                }
-            }
+      String commonPassword;
 
-        } catch (IOException e) {
-            e.printStackTrace();
+      while ((commonPassword = commonPasswords.readLine()) != null) {
+        if (password.toLowerCase().contains(commonPassword)) {
+          return false;
         }
+      }
 
-
-        return true;
+    } catch (IOException e) {
+      e.printStackTrace();
     }
+
+
+    return true;
+  }
 }
