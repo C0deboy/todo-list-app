@@ -49,13 +49,21 @@ html, body {
 	border-bottom-left-radius: 5px;
 }
 
-.user-options a {
+.user-options .option {
 	display: block;
 	padding: 5px 8px;
+	border: none;
 	border-top: 1px solid #8b8b8b;
 	text-decoration: none;
 	color: #d9e5f2;
+	font-size: inherit;
 	background: #585858;
+	text-align: left;
+	cursor: pointer;
+}
+
+button.option {
+	width: 100%;
 }
 
 .fa-sign-out {
@@ -293,7 +301,7 @@ html, body {
   transition: all 0.3s;
 }
 .list-title:hover,
-.user-options a:hover,
+.user-options .option:hover,
 .settings-option:hover {
   -webkit-filter: brightness(125%);
   -webkit-transition: all 0.3s;

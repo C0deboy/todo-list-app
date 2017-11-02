@@ -28,7 +28,7 @@
         <label class="remember-me">Remember me
             <input type="checkbox" name="remember-me"/>
         </label>
-        <form:button class="login-btn" href="login" >Log in!</form:button>
+        <form:button class="login-btn">Log in!</form:button>
     </form:form>
 
     <a class="signup-btn" href="<c:url value="/signup"/>" >Sign up!</a><a class="forgotPassword-btn" href="<c:url value="/forgotPassword"/>" >Forgot password?</a>

@@ -35,6 +35,7 @@ import static org.mockito.Mockito.anyString;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
 import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -131,7 +132,7 @@ public class LoginControllerTest {
   @Test
   public void shouldLogoutUserAtSpecificUrl() throws Exception {
 
-    mockMvc.perform(get("/logout"))
+    mockMvc.perform(post("/logout").with(csrf()))
         .andExpect(status().isFound())
         .andExpect(redirectedUrl("/logoutSuccess"));
   }
@@ -149,14 +150,14 @@ public class LoginControllerTest {
   @Test
   @WithMockUser(username = "user", password = "user")
   public void attemptToLoginWithInvalidCredentialsRusultsLoginFailure() throws Exception {
-    mockMvc.perform(post("/login"))
+    mockMvc.perform(post("/login").with(csrf()))
         .andExpect(status().isOk())
         .andExpect(forwardedUrl("/loginFailure"));
   }
 
   @Test
   public void atFailedLoginUserGetsMessage() throws Exception {
-    mockMvc.perform(post("/loginFailure"))
+    mockMvc.perform(post("/loginFailure").with(csrf()))
         .andExpect(status().isOk())
         .andExpect(view().name("login"))
         .andExpect(model().attributeHasFieldErrorCode(
@@ -179,7 +180,7 @@ public class LoginControllerTest {
     User user = new User("ts", "less8", "em.pl");
     String userBindingResult = "org.springframework.validation.BindingResult.user";
 
-    FlashMap flashMap = mockMvc.perform(post("/signup").flashAttr("user", user))
+    FlashMap flashMap = mockMvc.perform(post("/signup").flashAttr("user", user).with(csrf()))
         .andExpect(status().isFound())
         .andExpect(redirectedUrl("/signup"))
         .andExpect(flash().attributeExists(userBindingResult, "user"))
@@ -197,7 +198,7 @@ public class LoginControllerTest {
 
     String userBindingResult = "org.springframework.validation.BindingResult.user";
 
-    FlashMap flashMap = mockMvc.perform(post("/signup").flashAttr("user", user))
+    FlashMap flashMap = mockMvc.perform(post("/signup").flashAttr("user", user).with(csrf()))
         .andExpect(status().isFound())
         .andExpect(redirectedUrl("/login"))
         .andExpect(flash().attributeExists("message"))
@@ -225,7 +226,7 @@ public class LoginControllerTest {
     User user = new User("", "", "wrong.pl");
     String userBindingResult = "org.springframework.validation.BindingResult.user";
 
-    FlashMap flashMap = mockMvc.perform(post("/forgotPassword").flashAttr("user", user))
+    FlashMap flashMap = mockMvc.perform(post("/forgotPassword").flashAttr("user", user).with(csrf()))
         .andExpect(status().isFound())
         .andExpect(flash().attributeExists(userBindingResult, "user"))
         .andExpect(redirectedUrl("/forgotPassword"))
@@ -247,7 +248,7 @@ public class LoginControllerTest {
     User user = new User("", "", "root@gmail.com");
     String userBindingResult = "org.springframework.validation.BindingResult.user";
 
-    FlashMap flashMap = mockMvc.perform(post("/forgotPassword").flashAttr("user", user))
+    FlashMap flashMap = mockMvc.perform(post("/forgotPassword").flashAttr("user", user).with(csrf()))
         .andExpect(status().isFound())
         .andExpect(flash().attributeExists("message", "user"))
         .andExpect(redirectedUrl("/forgotPassword"))
