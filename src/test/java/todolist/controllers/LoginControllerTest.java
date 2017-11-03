@@ -18,8 +18,10 @@ import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
 import org.springframework.web.servlet.FlashMap;
 import org.springframework.web.servlet.view.InternalResourceViewResolver;
+import todolist.config.SpringRootConfiguration;
 import todolist.entities.User;
 import todolist.services.EmailService;
 import todolist.services.UserService;
@@ -28,6 +30,7 @@ import todolist.validators.PropertyValidator;
 import java.util.Locale;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.any;
@@ -40,6 +43,7 @@ import static org.springframework.security.test.web.servlet.request.SecurityMock
 import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.flash;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.forwardedUrl;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
@@ -48,7 +52,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(locations = "classpath:/appTestconfig-root.xml")
+@ContextConfiguration(classes = {SpringRootConfiguration.class})
 @WebAppConfiguration
 public class LoginControllerTest {
 
@@ -106,18 +110,8 @@ public class LoginControllerTest {
 
     mockMvc.perform(get("/Codeboy/your-todo-lists")
         .with(user("user").password("user")))
+        .andExpect(status().isForbidden())
         .andExpect(forwardedUrl("/accessDenied"));
-  }
-
-  @Test
-  public void accessDeniedPageShouldContainMessage() throws Exception {
-
-    mockMvc.perform(get("/accessDenied"))
-        .andExpect(status().isOk())
-        .andExpect(view().name("access-denied"))
-        .andExpect(model().attributeExists("message"));
-
-    verify(messageSource, times(1)).getMessage("Access.denied", null, Locale.ENGLISH);
   }
 
   @Test
@@ -153,17 +147,6 @@ public class LoginControllerTest {
     mockMvc.perform(post("/login").with(csrf()))
         .andExpect(status().isOk())
         .andExpect(forwardedUrl("/loginFailure"));
-  }
-
-  @Test
-  public void atFailedLoginUserGetsMessage() throws Exception {
-    mockMvc.perform(post("/loginFailure").with(csrf()))
-        .andExpect(status().isOk())
-        .andExpect(view().name("login"))
-        .andExpect(model().attributeHasFieldErrorCode(
-            "user",
-            "username",
-            "Invalid.credentials"));
   }
 
   @Test

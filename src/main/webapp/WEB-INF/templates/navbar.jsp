@@ -9,7 +9,7 @@
         <button class="toggle-user-options-btn">${username} <i class="fa fa-user" aria-hidden="true"></i></button>
 
         <ul class="user-options">
-            <li><a class="option" href="<c:url value="/${username}/your-todo-lists"/>">Your todolists <i class="fa fa-list" aria-hidden="true"></i></a></li>
+            <li><a class="option" href="<c:url value="/${username}/your-todo-lists"/>">Your todolists <i class="fa fa-list align-right" aria-hidden="true"></i></a></li>
             <li><a class="option" href="<c:url value="/${username}/settings"/>">Settings <i class="fa fa-cog align-right" aria-hidden="true"></i></a></li>
             <li>
                 <form:form action="/logout" modelAttribute="user" method="post">

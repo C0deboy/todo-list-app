@@ -11,6 +11,7 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.transaction.annotation.Transactional;
+import todolist.config.SpringRootConfiguration;
 import todolist.entities.Task;
 import todolist.entities.TodoList;
 import todolist.entities.User;
@@ -22,7 +23,7 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(locations = "/appTestconfig-root.xml")
+@ContextConfiguration(classes = {SpringRootConfiguration.class})
 @WebAppConfiguration
 @Component
 public class TodoListDAOTest {
