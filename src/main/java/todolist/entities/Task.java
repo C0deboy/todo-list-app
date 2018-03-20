@@ -1,5 +1,7 @@
 package todolist.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -14,11 +16,11 @@ public class Task {
   private int id;
   private String task;
   private byte done;
+  @JsonIgnore
   private TodoList listReference;
 
   public Task() {
   }
-
   public Task(String task, TodoList listReference) {
     this.task = task;
     this.listReference = listReference;

@@ -71,7 +71,7 @@
 			</button>
 		</form:form>
 	</div>
-	
+
 	<script src="<c:url value="/resources/js/todo-list.js" />"></script>
 </body>
 </html>

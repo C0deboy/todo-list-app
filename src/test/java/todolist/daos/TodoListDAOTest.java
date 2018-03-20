@@ -127,11 +127,10 @@ public class TodoListDAOTest {
 
     assertEquals("Retrived name should be changed but is not", newName, retrivedName);
 
-
     Task task = new Task("Test", todolists.get(0));
-    todoListDAO.addTask(task);
+//    todoListDAO.addTask(task); TODO
 
-    todoListDAO.deleteTodoList(todolists.get(0));
+    todoListDAO.deleteTodoList(todolists.get(0).getId());
 
     todolists = todoListDAO.getTodolistsFor(user);
 

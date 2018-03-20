@@ -8,6 +8,7 @@ import todolist.entities.Task;
 import todolist.entities.TodoList;
 import todolist.entities.User;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
 
@@ -35,14 +36,14 @@ public class TodoListServiceImpl implements TodoListService {
 
   @Override
   @Transactional
-  public void addTodoList(TodoList todoList) {
-    todoListDAO.addTodoList(todoList);
+  public Serializable addTodoList(TodoList todoList) {
+    return todoListDAO.addTodoList(todoList);
   }
 
   @Override
   @Transactional
-  public void deleteTodoList(TodoList todoList) {
-    todoListDAO.deleteTodoList(todoList);
+  public void deleteTodoList(int id) {
+    todoListDAO.deleteTodoList(id);
   }
 
   @Override

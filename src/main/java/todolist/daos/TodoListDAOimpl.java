@@ -9,6 +9,7 @@ import todolist.entities.Task;
 import todolist.entities.TodoList;
 import todolist.entities.User;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
 
@@ -57,18 +58,19 @@ public class TodoListDAOimpl implements TodoListDAO {
   }
 
   @Override
-  public void addTodoList(TodoList todoList) {
+  public Serializable addTodoList(TodoList todoList) {
 
     Session currentSession = sessionFactory.getCurrentSession();
-
-    currentSession.save(todoList);
-
+    return currentSession.save(todoList);
   }
 
   @Override
-  public void deleteTodoList(TodoList todoList) {
+  public void deleteTodoList(int id) {
+
     Session currentSession = sessionFactory.getCurrentSession();
-    currentSession.delete(todoList);
+    Query query = currentSession.createQuery("delete TodoList where id=:id");
+    query.setParameter("id", id);
+    query.executeUpdate();
   }
 
   @Override

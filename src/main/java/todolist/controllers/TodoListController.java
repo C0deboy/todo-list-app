@@ -57,7 +57,7 @@ public class TodoListController {
 
   @PostMapping(value = "/{username}/manageTodoList", params = "deleteList")
   public String deleteList(@PathVariable String username, @ModelAttribute TodoList todoList) {
-    todoListService.deleteTodoList(todoList);
+    todoListService.deleteTodoList(todoList.getId());
     return "redirect:/" + username + "/your-todo-lists";
   }
 

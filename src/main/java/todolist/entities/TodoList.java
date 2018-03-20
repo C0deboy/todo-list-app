@@ -4,6 +4,8 @@ import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.OrderBy;
@@ -14,6 +16,8 @@ import java.util.List;
 @Entity
 @Table(name = "lists", schema = "spring-todo-list")
 public class TodoList {
+
+
   private int id;
   private String name;
   private int ownerID;
@@ -28,6 +32,7 @@ public class TodoList {
   }
 
   @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
   @Column(name = "id")
   public int getId() {
     return id;
@@ -81,7 +86,7 @@ public class TodoList {
   @Override
   public String toString() {
     return "TodoList{" + "id=" + id + ", name='" + name + '\''
-        + ", owner=" + ownerID + ", tasks=" + tasks + '}';
+        + ", ownerID=" + ownerID + ", tasks=" + tasks + '}';
   }
 
   @OneToMany(mappedBy = "listReference", fetch = FetchType.EAGER)

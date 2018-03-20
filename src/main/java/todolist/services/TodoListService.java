@@ -4,6 +4,7 @@ import todolist.entities.Task;
 import todolist.entities.TodoList;
 import todolist.entities.User;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
 public interface TodoListService {
@@ -11,9 +12,9 @@ public interface TodoListService {
 
   void addTask(Task task);
 
-  void addTodoList(TodoList todoList);
+  Serializable addTodoList(TodoList todoList);
 
-  void deleteTodoList(TodoList todoList);
+  void deleteTodoList(int id);
 
   void changeTodoListName(TodoList todoList);
 
